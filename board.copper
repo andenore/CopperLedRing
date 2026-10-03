@@ -96,11 +96,12 @@ board RoundLedRing {
     constraint fixed_placement(BT1) { x = 29mm; y = 25mm; rotation = 0; side = back; }
     constraint fixed_placement(J_SWD) { x = 25mm; y = 16mm; rotation = 0; side = front; }
     constraint fixed_placement(C_DEC1) { x = 7.5mm; y = 22.5mm; rotation = 90; side = front; }
-    constraint fixed_placement(C_DEC3) { x = 18.2mm; y = 27.5mm; rotation = 90; side = front; }
+    // DEC3 is on the right-hand pin row at y=24 mm; keep its capacitor nearby.
+    constraint fixed_placement(C_DEC3) { x = 17.8mm; y = 24mm; rotation = 90; side = front; }
     constraint fixed_placement(C_DEC4) { x = 11.5mm; y = 19.2mm; rotation = 90; side = front; }
     constraint fixed_placement(C_VDD1) { x = 7.5mm; y = 27.5mm; rotation = 90; side = front; }
     // Face VDD toward the MCU's upper supply pin, outside the SWD/DEC3 corridor.
-    constraint fixed_placement(C_VDD2) { x = 18.3mm; y = 24mm; rotation = 270; side = front; }
+    constraint fixed_placement(C_VDD2) { x = 18.3mm; y = 21.5mm; rotation = 270; side = front; }
     constraint fixed_placement(C_BULK) { x = 14.5mm; y = 20mm; rotation = 0; side = front; }
     constraint fixed_placement(R_RESET) { x = 8.5mm; y = 30mm; rotation = 0; side = front; }
 
