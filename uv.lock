@@ -11,9 +11,9 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "copperscript", git = "https://github.com/andenore/CopperScript.git?rev=31df16c58180b8cc61eee715819a88380f8e3ac5" }]
+requires-dist = [{ name = "copperscript", git = "https://github.com/andenore/CopperScript.git?rev=dcbdcc0f73656e86a2ecd036efe78b1c0889504f" }]
 
 [[package]]
 name = "copperscript"
 version = "0.1.0"
-source = { git = "https://github.com/andenore/CopperScript.git?rev=31df16c58180b8cc61eee715819a88380f8e3ac5#31df16c58180b8cc61eee715819a88380f8e3ac5" }
+source = { git = "https://github.com/andenore/CopperScript.git?rev=dcbdcc0f73656e86a2ecd036efe78b1c0889504f#dcbdcc0f73656e86a2ecd036efe78b1c0889504f" }
