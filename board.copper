@@ -90,17 +90,18 @@ board RoundLedRing {
     supply GND { voltage = 0V; external = true; }
 
     // LED controller only: internal clocks; ANT/XC1/XC2 unconnected, radio off.
-    // Offsets keep the MCU copper projection clear of all rear holder contacts.
-    constraint fixed_placement(U1) { x = 13.5mm; y = 25mm; rotation = 0; side = front; }
+    // Reserve off-pad through-via and escape space before the rear holder contacts.
+    // Move the MCU 1 mm left; keep support parts and the LED ring legally spaced.
+    constraint fixed_placement(U1) { x = 12.5mm; y = 25mm; rotation = 0; side = front; }
     constraint fixed_placement(BT1) { x = 29mm; y = 25mm; rotation = 0; side = back; }
     constraint fixed_placement(J_SWD) { x = 25mm; y = 16mm; rotation = 0; side = front; }
-    constraint fixed_placement(C_DEC1) { x = 8.5mm; y = 22.5mm; rotation = 90; side = front; }
-    constraint fixed_placement(C_DEC3) { x = 18.2mm; y = 27.5mm; rotation = 90; side = front; }
+    constraint fixed_placement(C_DEC1) { x = 7.5mm; y = 22.5mm; rotation = 90; side = front; }
+    constraint fixed_placement(C_DEC3) { x = 17.2mm; y = 27.5mm; rotation = 90; side = front; }
     constraint fixed_placement(C_DEC4) { x = 11.5mm; y = 19.2mm; rotation = 90; side = front; }
-    constraint fixed_placement(C_VDD1) { x = 8.5mm; y = 27.5mm; rotation = 90; side = front; }
-    constraint fixed_placement(C_VDD2) { x = 18.3mm; y = 24mm; rotation = 90; side = front; }
+    constraint fixed_placement(C_VDD1) { x = 7.5mm; y = 27.5mm; rotation = 90; side = front; }
+    constraint fixed_placement(C_VDD2) { x = 17.3mm; y = 24mm; rotation = 90; side = front; }
     constraint fixed_placement(C_BULK) { x = 14.5mm; y = 20mm; rotation = 0; side = front; }
-    constraint fixed_placement(R_RESET) { x = 9.5mm; y = 30mm; rotation = 0; side = front; }
+    constraint fixed_placement(R_RESET) { x = 8.5mm; y = 30mm; rotation = 0; side = front; }
 
     mechanical {
         outline circle { center = (25mm, 25mm); diameter = 50mm; }
@@ -131,7 +132,7 @@ board RoundLedRing {
     constraint fixed_placement(LED9) { x = 5.947441mm; y = 36.000000mm; rotation = 210; side = front; edge_clearance = 1mm; }
     constraint fixed_placement(R_LED9) { x = 9.238338mm; y = 34.100000mm; rotation = 210; side = front; }
     constraint fixed_placement(LED10) { x = 3.000000mm; y = 25.000000mm; rotation = 180; side = front; edge_clearance = 1mm; }
-    constraint fixed_placement(R_LED10) { x = 6.800000mm; y = 25.000000mm; rotation = 180; side = front; }
+    constraint fixed_placement(R_LED10) { x = 6.600000mm; y = 25.000000mm; rotation = 180; side = front; }
     constraint fixed_placement(LED11) { x = 5.947441mm; y = 14.000000mm; rotation = 150; side = front; edge_clearance = 1mm; }
     constraint fixed_placement(R_LED11) { x = 9.238338mm; y = 15.900000mm; rotation = 150; side = front; }
     constraint fixed_placement(LED12) { x = 14.000000mm; y = 5.947441mm; rotation = 120; side = front; edge_clearance = 1mm; }
