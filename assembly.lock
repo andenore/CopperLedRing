@@ -1,6 +1,6 @@
 {
   "board": "RoundLedRing",
-  "electrical_sha256": "ba937b2966e95dd25273f1521998af94baf809ae8a69d578492810e7f840838a",
+  "electrical_sha256": "b418a3f3157194e1083b4aabf5c5d940376bc15b99552fd4f79b68f69314edf1",
   "schema": "copperscript-assembly-lock/v0.1",
   "selections": [
     {
