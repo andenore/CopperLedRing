@@ -88,6 +88,9 @@ should not be necessary to reproduce that released board.
 Until that release exists, the GitHub artifacts are **inspection drafts only**.
 Remaining ordering gates:
 
+The [assembly-pinning trial](ASSEMBLY.md) records three exact JLCPCB candidates
+and the remaining unresolved selections. It is not an orderable BOM or stock check.
+
 - Close every connection and pass both CopperScript and native KiCad checks.
 - Qualify the circular outline, copper fill and drill outputs independently.
 - Replace illustrative LED/passive definitions with verified orderable parts in
