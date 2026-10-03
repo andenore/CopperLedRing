@@ -21,15 +21,12 @@ does not qualify footprint dimensions, assembly rotation, stock or the order.
 
 ## Prototype commands
 
-These commands require the new CopperScript `assembly` feature. The project's
-existing released Git pin has **not** been upgraded by this local experiment;
-`uv run --locked` at that pin does not yet expose these commands. Update the
-compiler pin/`uv.lock` to a published feature revision before using them in the
-normal template build. No sibling CopperLib checkout is needed.
+The pinned CopperScript revision provides the `assembly` feature. Use the
+locked environment below; no sibling CopperLib checkout is needed.
 
 ```sh
-copper assembly check board.copper --locked --offline --lock assembly.lock --report build/assembly.json
-copper assembly bom board.copper --locked --offline --lock assembly.lock -o build/bom.csv
+uv run --locked copper assembly check board.copper --locked --offline --lock assembly.lock --report build/assembly.json
+uv run --locked copper assembly bom board.copper --locked --offline --lock assembly.lock -o build/bom.csv
 ```
 
 The first command must currently fail with unresolved/unreviewed selections;

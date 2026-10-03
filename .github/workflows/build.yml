@@ -28,19 +28,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes make kicad
           test "$(kicad-cli version)" = "10.0.6"
-      - name: Build the inspection project from locked URL dependencies
+      - name: Route and verify the board from locked URL dependencies
         run: |
-          make pcb render
+          make
           kicad-cli version > build/kicad-version.txt
-          kicad-cli pcb drc --refill-zones --save-board --format json --severity-all -o build/inspection-drc.json build/board.kicad_pcb
-      - name: Attempt the complete routing build
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
-        run: make
+      - name: Retain native DRC diagnostics even after routing failure
+        if: always()
+        run: |
+          if test -f build/board.kicad_pcb; then
+            kicad-cli pcb drc --refill-zones --save-board --format json --severity-all -o build/drc.json build/board.kicad_pcb
+          fi
       - name: Render the latest available draft even after routing failure
         if: always()
         run: |
           if test -f build/board.kicad_pcb; then make render; fi
-      - name: Upload inspection artifacts, never an order-ready release
+      - name: Upload routing diagnostics, never an order-ready release
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:

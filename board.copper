@@ -104,7 +104,11 @@ board RoundLedRing {
 
     mechanical {
         outline circle { center = (25mm, 25mm); diameter = 50mm; }
-        rules { minimum_track_width = 0.15mm; minimum_clearance = 0.15mm; }
+        rules {
+            minimum_track_width = 0.15mm; minimum_clearance = 0.15mm;
+            default_track_width = 0.15mm;
+            default_via_size = 0.6mm; default_via_drill = 0.3mm;
+        }
     }
     constraint copper_zone(GND) { layers = "B.Cu"; inset = 0.5mm; pad_connection = solid; }
 

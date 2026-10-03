@@ -141,9 +141,11 @@ the internal clocks/LDO configuration. GPIO output LOW illuminates an LED.
 
 ## GitHub artifacts
 
-Pushes and pull requests build the quick inspection project and upload its
-KiCad files, layer previews and reports. Manual runs and `v*` tags additionally
-attempt full routing. Failed runs retain diagnostics as inspection artifacts.
+Every push to `main`, pull request, manual run and `v*` tag runs the full `make`
+workflow: routing, native KiCad DRC/connectivity checks, and layer rendering.
+Routing is not an optional manual/tag-only step. Any routing failure, DRC
+violation or open connection fails the job. Failed runs retain native diagnostics
+and available layer previews as inspection artifacts, never as successful boards.
 There is no automatic manufacturing release while the ordering gates are open.
 
 MIT license. Experimental hardware; review independently before manufacture.
