@@ -1,0 +1,12 @@
+[project]
+name = "copper-led-ring"
+version = "0.1.0"
+description = "A minimal CopperScript LED-ring board example and reusable project template"
+requires-python = ">=3.12,<3.13"
+dependencies = ["copperscript"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+copperscript = { git = "https://github.com/andenore/CopperScript.git", rev = "da7961ffbf86dc4f656a350092176408412ed828" }

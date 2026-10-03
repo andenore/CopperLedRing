@@ -1,0 +1,3 @@
+module github.com/andenore/CopperLedRing
+
+require github.com/andenore/CopperLib b336e61bd881287e7bed26c3929f213ec413f52b

@@ -1,0 +1,19 @@
+version = 1
+revision = 3
+requires-python = "==3.12.*"
+
+[[package]]
+name = "copper-led-ring"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "copperscript" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "copperscript", git = "https://github.com/andenore/CopperScript.git?rev=da7961ffbf86dc4f656a350092176408412ed828" }]
+
+[[package]]
+name = "copperscript"
+version = "0.1.0"
+source = { git = "https://github.com/andenore/CopperScript.git?rev=da7961ffbf86dc4f656a350092176408412ed828#da7961ffbf86dc4f656a350092176408412ed828" }
