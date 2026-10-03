@@ -20,6 +20,29 @@ active-low red LEDs, a rear Keystone 3034 CR2032 holder, a 10-pin SMD Cortex-M
 SWD header, and bypass/LDO-support capacitors. This is an LED controller:
 **Bluetooth is not fitted**, and there is no antenna or external crystal.
 
+### Placement previews — not a routed board
+
+These are renders of the actual generated KiCad inspection board, not a mockup
+or a photograph of assembled hardware. The front has twelve LEDs around the
+edge, their resistors just inside, the MCU to the left of centre and the SWD
+connector above it. The mirrored rear view shows the battery holder and GND pour.
+Fabrication labels are omitted on the front for readability.
+
+| Front: copper pads and silkscreen | Rear: mirrored copper, holder outline and GND pour |
+| --- | --- |
+| ![Front placement preview of the unrouted LED-ring board](docs/images/placement-front.png) | ![Mirrored rear placement preview with battery holder and ground pour](docs/images/placement-back.png) |
+
+**Verified inspection status (2026-10-03, KiCad 10.0.6): 0 tracks, 0 vias,
+0 other DRC violations, and 63 unconnected items.** Native DRC with zone refill
+returned exit code 5. The board is **not fully routed and does not pass signoff**.
+A visible ground pour does not prove that every ground pad is connected. These
+images show the intended placement, not the final routing or an order-ready PCB.
+
+The source snapshot's SHA-256 is
+`4c667836e1987ed05b7ffc3a844ec08ff245b59d605ed76d1ddcfb63bf8b708f`
+(`board.copper`). Checked-in images are snapshots; regenerate them when the
+source/placement changes. The source build, not these images, remains authoritative.
+
 `board.copper` is the authoritative circuit and mechanical intent, including
 the circular outline, fixed positions/rotations, rear ground pour and
 0.15 mm minimum track/clearance rules. There is no Python placement builder,
@@ -67,6 +90,16 @@ Generated KiCad files/local footprint tables, SVGs, routing/DRC reports and
 draft left by a failed routing attempt. A nonzero exit is a failed check, not a
 successful build. Do not use `make -i` to prepare an order. Routing can take
 considerably longer than the inspection build.
+
+For the README preview layer combinations, export from an existing inspection
+build using KiCad (on Windows, use the executable path shown above):
+
+```sh
+kicad-cli pcb export svg --layers F.Cu,F.Silkscreen,Edge.Cuts --mode-single --fit-page-to-board --exclude-drawing-sheet --check-zones -o build/readme-front.svg build/board.kicad_pcb
+kicad-cli pcb export svg --layers B.Cu,B.Fab,B.Silkscreen,Edge.Cuts --mirror --mode-single --fit-page-to-board --exclude-drawing-sheet --check-zones -o build/readme-back.svg build/board.kicad_pcb
+```
+
+The committed PNGs are rasterizations of those SVGs on a white background.
 
 ## Use this project as a template
 
