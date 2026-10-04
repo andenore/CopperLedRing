@@ -28,7 +28,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes make kicad
           test "$(kicad-cli version)" = "10.0.6"
-      - name: Route and verify the board from locked URL dependencies
+      - name: Route, verify and export manufacturing files from locked URL dependencies
         timeout-minutes: 45
         run: |
           make
@@ -43,7 +43,7 @@ jobs:
         if: always()
         run: |
           if test -f build/board.kicad_pcb; then make render; fi
-      - name: Upload routing diagnostics, never an order-ready release
+      - name: Upload routing and build diagnostics
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -51,3 +51,40 @@ jobs:
           path: build/
           if-no-files-found: warn
           retention-days: 14
+      - name: Upload manufacturing files only after successful native DRC and BOM checks
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: CopperLedRing-manufacturing-${{ github.sha }}
+          path: build/manufacturing/
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: board
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: CopperLedRing-manufacturing-${{ github.sha }}
+          path: manufacturing
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: CopperLedRing-inspection-${{ github.sha }}
+          path: inspection
+      - name: Package all routing diagnostics and layer previews
+        run: zip -r routing-inspection.zip inspection
+      - name: Publish the tagged unprogrammed-hardware manufacturing package
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG_NAME" manufacturing/manufacturing-package.zip manufacturing/gerbers-drill.zip manufacturing/bom.csv manufacturing/cpl.csv manufacturing/manifest.json manufacturing/SHA256SUMS routing-inspection.zip \
+            --title "CopperLedRing $TAG_NAME — manufacturing files" --prerelease \
+            --notes "Fully routed, native KiCad DRC-clean unprogrammed hardware. Independent CAM qualification intentionally skipped. Includes Gerbers, drills, exact BOM, both-side CPL, PCB/project, reports and checksums. Check supplier stock, BOM matching and assembly preview before ordering. Firmware and CR2032 cell are not included."

@@ -8,8 +8,8 @@ BOARD := board.copper
 BUILD := build
 PCB := $(BUILD)/board.kicad_pcb
 
-.PHONY: all fetch check pcb route render verify order
-all: route verify render
+.PHONY: all fetch check pcb route render verify assembly manufacturing order
+all: manufacturing render
 
 fetch:
 	$(UV) sync --locked
@@ -32,6 +32,14 @@ verify:
 	"$(KICAD_CLI)" pcb drc --refill-zones --save-board --format json --severity-all --exit-code-violations -o $(BUILD)/drc.json $(PCB)
 	$(UV) run --locked python -c "import json; r=json.load(open('$(BUILD)/drc.json')); assert not r['violations'] and not r['unconnected_items'], 'Board still has DRC violations or unrouted connections'"
 
-# Deliberately fail closed until both CAM and assembly release gates exist.
+assembly: check
+	$(UV) run --locked copper assembly check $(BOARD) --locked --offline --lock assembly.lock --report $(BUILD)/assembly.json
+	$(UV) run --locked copper assembly bom $(BOARD) --locked --offline --lock assembly.lock -o $(BUILD)/bom.csv
+
+# Native DRC is required; independent CAM qualification is explicitly skipped.
+# No firmware or order submission. Existing successful exports are backed up.
+manufacturing: route verify assembly
+	$(UV) run --locked copper export-manufacturing $(PCB) --kicad-cli "$(KICAD_CLI)" --skip-independent-cam --bom $(BUILD)/bom.csv --replace -o $(BUILD)/manufacturing
+
 order: all
-	$(UV) run --locked python -c "raise SystemExit('NOT ORDER-READY: circular CAM qualification, orderable BOM/CPL and firmware release remain outstanding. See README.md.')"
+	$(UV) run --locked python -c "print('Files: $(BUILD)/manufacturing. Upload gerbers-drill.zip, bom.csv and cpl.csv. Check supplier stock, BOM matching and assembly polarity/rotation preview before ordering. Firmware and battery cell are not included.')"

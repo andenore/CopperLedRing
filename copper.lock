@@ -1,7 +1,7 @@
 {
   "modules": [
     {
-      "checksum": "sha256:ca7d27ec7dddec623679d359fc1d1ea54ec6e4ccade59b74a9656b99f6632fbc",
+      "checksum": "sha256:2116c2d08f0445060a46f85558da9187ede370f104fd7224240152dd5edcaf4d",
       "files": [
         {
           "path": "copper.mod",
@@ -104,6 +104,11 @@
           "size": 1833
         },
         {
+          "path": "footprints/LED_SMD.pretty/KENTO_KT0603R.kicad_mod",
+          "sha256": "6af1e7d3d576b9e5ad75a000c6cc2581b7521b57b1bb95978e899c409579240f",
+          "size": 1591
+        },
+        {
           "path": "footprints/RF_Module.pretty/Quectel_EG800G.kicad_mod",
           "sha256": "04c7d4959775476212750edb1ed2fc78bc98a30c086a8c183304b86d838b8747",
           "size": 12400
@@ -122,6 +127,36 @@
           "path": "generated/stm32g0b1cbt6.copper",
           "sha256": "861271cd0e5eb020a733933657af0f8a04634d05abe05c02273c10743ddb1e72",
           "size": 1230
+        },
+        {
+          "path": "packages/assembly_basics/capacitor_100nf.copper",
+          "sha256": "d40d56381b45a47e4822ac811cec11a51e26299898d8e1838edaffca5336ade8",
+          "size": 621
+        },
+        {
+          "path": "packages/assembly_basics/capacitor_100pf.copper",
+          "sha256": "7bdcfdd0d33ae36a38b452c6ef12387e6dd246eeaa02f91951edc75d80d0b9a2",
+          "size": 781
+        },
+        {
+          "path": "packages/assembly_basics/capacitor_1uf.copper",
+          "sha256": "07369a95414423738912ade9b5c39d3686b1d290b8e88ff8d2bf14ce0442661b",
+          "size": 627
+        },
+        {
+          "path": "packages/assembly_basics/capacitor_4u7.copper",
+          "sha256": "dd94dc1bc731e350e4ea8b80c496c223fcfe3596193dd960aaed2cd50bc299e1",
+          "size": 629
+        },
+        {
+          "path": "packages/assembly_basics/kento_kt0603r.copper",
+          "sha256": "321582ff510f9677f9e31811a0066f34486bb6d1d8ff6a0d690fcd21276546e4",
+          "size": 852
+        },
+        {
+          "path": "packages/assembly_basics/resistor_10k.copper",
+          "sha256": "74ff74de563229c7aad414129f0ab33310b8f616cd5ef879769541eb60ca04ba",
+          "size": 744
         },
         {
           "path": "packages/full_vertical/button.copper",
@@ -276,7 +311,7 @@
       ],
       "module": "github.com/andenore/CopperLib",
       "source": "git:https://github.com/andenore/CopperLib.git",
-      "version": "b336e61bd881287e7bed26c3929f213ec413f52b"
+      "version": "de13abb9b60ee736026672c9980a28ac0915de34"
     }
   ],
   "schema": "copperscript.package-lock/v1"

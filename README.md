@@ -4,16 +4,16 @@
 
 **A minimal [CopperScript](https://github.com/andenore/CopperScript) example
 project and reusable board-project template.** It is also intended to be a
-direct-order hardware proof of concept: take a qualified release's manufacturing
+direct-order hardware proof of concept: take a release's manufacturing
 and assembly files, order the board, and try the design without writing your own
 circuit first.
 
-**Current ordering status: DRAFT — no order-ready release exists yet.**
-The source and build are usable as a template now, but generated drafts must not
-be submitted as an assembled-board order. The current circuit has illustrative
-LED/passive selections, and CopperScript's
-independent circular-outline CAM release gate is still closed. `make order`
-fails closed; it never labels an inspection artifact as production-ready.
+**Manufacturing target: assembled, unprogrammed hardware.** `make order` builds
+the complete routed board, checks native KiCad DRC, validates all 34 exact BOM
+selections and generates manufacturing/assembly files. Independent CAM
+qualification is explicitly skipped; firmware is outside scope. Before submitting
+an order, check supplier availability, BOM matching and the assembled preview.
+Generated files are not a stock reservation, factory approval or a tested unit.
 
 ## The board
 
@@ -24,7 +24,7 @@ SWD header, and bypass/LDO-support capacitors. This is an LED controller:
 
 ### Routed board — native DRC clean
 
-These are renders of the actual GitHub-built KiCad inspection board, not a mockup
+These are renders of the actual locked-build KiCad board, not a mockup
 or a photograph of assembled hardware. The front has twelve LEDs around the
 edge, their resistors just inside, the MCU to the left of centre and the SWD
 connector above it. Both sides have GND pours with disconnected islands removed.
@@ -38,9 +38,9 @@ Fabrication labels are omitted on the front for readability.
 **Verified routing status (2026-10-04, KiCad 10.0.6): 393 track segments,
 36 vias, 0 DRC violations, 0 isolated islands and 0 unconnected items.** All 31
 ordinary nets route; GND connectivity is independently verified after native
-copper refill. The full locked-dependency build passed both locally and in
-[GitHub Actions](https://github.com/andenore/CopperLedRing/actions/runs/37163778171).
-The images are from that successful GitHub artifact. No hand-routed tracks,
+copper refill. The updated exact-part board passed the locked-dependency routing
+and manufacturing build locally; GitHub runs the same Makefile sequence.
+The images are from that verified routed result. No hand-routed tracks,
 clearance waivers or via-in-pad permissions are used.
 
 `build/route.json` reports `routing_complete=true` and
@@ -49,7 +49,7 @@ zones remain deferred in the explicit-copper graph; only the native filled-board
 check closes them. Routing completion is not assembly or manufacturing signoff.
 
 The source snapshot's SHA-256 is
-`bab5a4c369915ac9b5b6b4e705d3d7c65bd103669b21c0a07d288e61452c0024`
+`c2820b7bb9bbd576815a3ab3f9bbe948c3cd2f861266afea02920870946c487d`
 (`board.copper`). Checked-in images are snapshots; regenerate them when the
 source/placement changes. The source build, not these images, remains authoritative.
 
@@ -69,7 +69,8 @@ The Python/compiler and CopperLib Git revisions are pinned by the committed
 git clone https://github.com/andenore/CopperLedRing.git
 cd CopperLedRing
 make pcb render             # quick placed/unrouted inspection build
-make                        # complete routing, copper refill, native DRC and renders
+make                        # route, refill, native DRC, BOM/CPL, manufacturing files and renders
+make order                  # same build, plus a reminder of the upload files
 ```
 
 The first build automatically downloads CopperScript and CopperLib from their
@@ -93,7 +94,9 @@ Targets:
 | `make route` | Run package escapes, detailed routing and native fill verification; profile every run |
 | `make render` | Render front/back copper SVGs from the existing PCB |
 | `make verify` | Refill/save copper and reject all native violations and opens |
-| `make order` | Ordering gate; currently blocked, never produces a release |
+| `make assembly` | Validate exact selections and export the JLCPCB BOM |
+| `make manufacturing` | Route and verify, then export manufacturing files and both-side CPL |
+| `make order` | Complete build and print supplier-upload reminders; does not place an order |
 
 Generated KiCad files/local footprint tables, SVGs, routing/DRC reports and
 `route.pstats` stay under ignored `build/`. Use `make render` to inspect a
@@ -122,24 +125,34 @@ Keep full commit pins and regenerate/review locks intentionally when upgrading.
 
 ## Order the proof of concept
 
-Once an **order-ready** tagged release has passed routing, independent CAM and
-assembly validation, it should contain the Gerber/Excellon bundle, assembly BOM,
-component placement (CPL) files, exact JLCPCB selections, inspection reports and
-checksums. Those files are the direct-order proof of concept; editing the source
-should not be necessary to reproduce that released board.
+Run `make order` from a fresh checkout. The authoritative output is
+`build/manufacturing/`:
 
-Until that release exists, the GitHub artifacts are **inspection drafts only**.
-Remaining ordering gates:
+- `gerbers-drill.zip`: all copper, mask, silkscreen, paste and circular-outline
+  Gerbers plus separate plated/nonplated metric drill files. Upload for fabrication.
+- `bom.csv`: grouped JLCPCB selections for 34 components / nine exact MPNs.
+- `cpl.csv`: placement coordinates/rotations for all 34 parts, including the rear
+  battery holder. Upload BOM and CPL for assembly.
+- `manufacturing-package.zip`: complete package, including the native PCB/project,
+  local footprints, IPC-D-356 netlist, native positions, DRC report, manifest and
+  checksums. Archive this with the source revision and ordering choices.
 
-The [assembly-pinning trial](ASSEMBLY.md) records three exact JLCPCB candidates
-and the remaining unresolved selections. It is not an orderable BOM or stock check.
+Native DRC and exact-selection checks are mandatory. Independent CAM qualification
+is **not** required for this example; the manifest explicitly records it as skipped.
+Repeat exports retain previous successful directories as ignored
+`.manufacturing-previous-*` siblings. `make order` does not purchase or submit an order.
+GNU Make is required; the same recipe runs in GitHub on Linux.
 
-- Preserve the completed routing/native DRC result when qualifying exact parts.
-- Qualify the circular outline, copper fill and drill outputs independently.
-- Replace illustrative LED/passive definitions with verified orderable parts in
-  CopperLib; verify all JLCPCB selections, footprints, rotations and assembly sides.
-- Produce and validate the assembly BOM/CPL, including the rear holder and SWD header.
-- Supply a reviewed firmware/flash procedure and tag the verified source/toolchain.
+The [assembly review](ASSEMBLY.md) documents exact reusable CopperLib parts,
+manufacturer polarity/footprint mappings and procurement codes. There are no
+remaining placeholder LED/passive selections. Firmware is not a build gate.
+
+Use two-layer, 50 mm circular FR-4 with the PCB's 1.6 mm thickness and populated
+front/rear sides. Confirm copper weight, finish, solder mask, stencil/process
+settings and double-sided assembly in the supplier's quotation. Check current
+stock for the chosen quantity and inspect the upload preview: MCU/SWD pin 1,
+LED cathodes and battery-holder polarity/side. No automatic supplier-specific
+rotation corrections or substitutions are guessed. Supply the CR2032 separately.
 
 Do not assume battery supply or firmware programming is included in PCBA.
 This repository currently contains no firmware. The proof-of-concept user must
@@ -152,10 +165,15 @@ the internal clocks/LDO configuration. GPIO output LOW illuminates an LED.
 ## GitHub artifacts
 
 Every push to `main`, pull request, manual run and `v*` tag runs the full `make`
-workflow: routing, native KiCad DRC/connectivity checks, and layer rendering.
+workflow: routing, native KiCad DRC/connectivity checks, assembly selection checks,
+manufacturing/assembly exports and layer rendering.
 Routing is not an optional manual/tag-only step. Any routing failure, DRC
 violation or open connection fails the job. Failed runs retain native diagnostics
 and available layer previews as inspection artifacts, never as successful boards.
-There is no automatic manufacturing release while the ordering gates are open.
+Successful runs upload a separate `CopperLedRing-manufacturing-<sha>` artifact;
+failed builds publish diagnostics only. `v*` tags additionally publish all generated
+manufacturing files as an experimental prerelease, clearly labelled as unprogrammed
+hardware with independent CAM qualification skipped. Supplier preview/availability
+review is still required before ordering. Do not tag an unverified build.
 
-MIT license. Experimental hardware; review independently before manufacture.
+MIT license. Experimental hardware; verify supplier preview and availability before ordering.

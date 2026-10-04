@@ -2,46 +2,46 @@
 // Outline, fixed placements and ground-pour intent are all declared below.
 // CR2032 is primary (not rechargeable). SWD VREF is sense only; no power injection.
 board RoundLedRing {
-    use library "tiny";
     import vertical "github.com/andenore/CopperLib/packages/full_vertical";
     import demo "github.com/andenore/CopperLib/packages/nrf52_demo";
+    import assembly "github.com/andenore/CopperLib/packages/assembly_basics";
 
     component U1: vertical.NRF52832_QFAA;
     component BT1: demo.KEYSTONE_3034;
     component J_SWD: vertical.SWD_HEADER;
-    // Generic red 0603 references, not yet orderable LED selections.
-    component LED1: demo.REFERENCE_LED_0603;
-    component LED2: demo.REFERENCE_LED_0603;
-    component LED3: demo.REFERENCE_LED_0603;
-    component LED4: demo.REFERENCE_LED_0603;
-    component LED5: demo.REFERENCE_LED_0603;
-    component LED6: demo.REFERENCE_LED_0603;
-    component LED7: demo.REFERENCE_LED_0603;
-    component LED8: demo.REFERENCE_LED_0603;
-    component LED9: demo.REFERENCE_LED_0603;
-    component LED10: demo.REFERENCE_LED_0603;
-    component LED11: demo.REFERENCE_LED_0603;
-    component LED12: demo.REFERENCE_LED_0603;
-    component R_LED1: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED2: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED3: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED4: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED5: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED6: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED7: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED8: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED9: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED10: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED11: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
-    component R_LED12: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
+    // Exact red LEDs; CopperLib preserves manufacturer A=1/K=2 numbering.
+    component LED1: assembly.KENTO_KT0603R;
+    component LED2: assembly.KENTO_KT0603R;
+    component LED3: assembly.KENTO_KT0603R;
+    component LED4: assembly.KENTO_KT0603R;
+    component LED5: assembly.KENTO_KT0603R;
+    component LED6: assembly.KENTO_KT0603R;
+    component LED7: assembly.KENTO_KT0603R;
+    component LED8: assembly.KENTO_KT0603R;
+    component LED9: assembly.KENTO_KT0603R;
+    component LED10: assembly.KENTO_KT0603R;
+    component LED11: assembly.KENTO_KT0603R;
+    component LED12: assembly.KENTO_KT0603R;
+    component R_LED1: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED2: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED3: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED4: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED5: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED6: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED7: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED8: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED9: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED10: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED11: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
+    component R_LED12: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
     // QFAA LDO support. DEC2/DCC unused; firmware must keep DC/DC disabled.
-    component C_DEC1: CAPACITOR { value = 100nF; footprint = "Capacitor_SMD:C_0402_1005Metric"; }
-    component C_DEC3: CAPACITOR { value = 100pF; footprint = "Capacitor_SMD:C_0402_1005Metric"; }
-    component C_DEC4: CAPACITOR { value = 1uF; footprint = "Capacitor_SMD:C_0603_1608Metric"; }
-    component C_VDD1: CAPACITOR { value = 100nF; footprint = "Capacitor_SMD:C_0402_1005Metric"; }
-    component C_VDD2: CAPACITOR { value = 100nF; footprint = "Capacitor_SMD:C_0402_1005Metric"; }
-    component C_BULK: CAPACITOR { value = 4.7uF; footprint = "Capacitor_SMD:C_0603_1608Metric"; }
-    component R_RESET: RESISTOR { value = 10kohm; footprint = "Resistor_SMD:R_0603_1608Metric"; }
+    component C_DEC1: assembly.SAMSUNG_CL05B104KO5NNNC { value = 100nF; }
+    component C_DEC3: assembly.FENGHUA_0402CG101J500NT { value = 100pF; }
+    component C_DEC4: assembly.SAMSUNG_CL10A105KB8NNNC { value = 1uF; }
+    component C_VDD1: assembly.SAMSUNG_CL05B104KO5NNNC { value = 100nF; }
+    component C_VDD2: assembly.SAMSUNG_CL05B104KO5NNNC { value = 100nF; }
+    component C_BULK: assembly.SAMSUNG_CL10A475KO8NNNC { value = 4.7uF; }
+    component R_RESET: assembly.UNIROYAL_0603WAF1002T5E { value = 10kohm; }
 
     net VBAT {
         BT1.POS; U1.VDD_1; U1.VDD_2; U1.VDD_3; J_SWD.VREF;

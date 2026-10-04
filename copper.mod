@@ -1,3 +1,3 @@
 module github.com/andenore/CopperLedRing
 
-require github.com/andenore/CopperLib b336e61bd881287e7bed26c3929f213ec413f52b
+require github.com/andenore/CopperLib de13abb9b60ee736026672c9980a28ac0915de34
