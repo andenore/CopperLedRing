@@ -7,8 +7,10 @@ FOOTPRINT_ROOT ?= /usr/share/kicad/footprints
 BOARD := board.copper
 BUILD := build
 PCB := $(BUILD)/board.kicad_pcb
+EDITOR_PYTHON ?= $(UV) run --locked python
+EDITOR_ARGS ?=
 
-.PHONY: all fetch check pcb route render verify assembly manufacturing order
+.PHONY: all fetch check pcb edit route render verify assembly manufacturing order
 all: manufacturing render
 
 fetch:
@@ -20,6 +22,10 @@ check: fetch
 
 pcb: check
 	$(UV) run --locked copper export-kicad-pcb $(BOARD) --locked --offline --footprint-root "$(FOOTPRINT_ROOT)" -o $(PCB)
+
+# Shared CopperScript editor; source edits use explicit diff review and Save.
+edit: fetch
+	$(EDITOR_PYTHON) -m copperscript edit-mechanical $(BOARD) --locked --offline --layers 2 --footprint-root "$(FOOTPRINT_ROOT)" $(EDITOR_ARGS)
 
 route: pcb
 	$(UV) run --locked python -c "from pathlib import Path; Path('$(BUILD)').mkdir(exist_ok=True)"

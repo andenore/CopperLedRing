@@ -94,6 +94,7 @@ Targets:
 | --- | --- |
 | `make check` | Install locked dependencies, fetch/verify CopperLib, run ERC |
 | `make pcb` | Export a placed, unrouted KiCad inspection project |
+| `make edit` | Open CopperScript's shared mechanical/floorplan editor with real footprints |
 | `make route` | Run package escapes, detailed routing and native fill verification; profile every run |
 | `make render` | Render front/back copper SVGs from the existing PCB |
 | `make verify` | Refill/save copper and reject all native violations and opens |
@@ -116,6 +117,41 @@ kicad-cli pcb export svg --layers B.Cu,B.Fab,B.Silkscreen,Edge.Cuts --mirror --m
 ```
 
 The committed PNGs are rasterizations of those SVGs on a white background.
+
+## Mechanical and placement editor
+
+```sh
+make edit
+```
+
+On Windows:
+
+```powershell
+make edit FOOTPRINT_ROOT="C:/Program Files/KiCad/10.0/share/kicad/footprints"
+```
+
+This uses the pinned compiler from GitHub, not a local CopperScript checkout or
+project-specific editor script. The board's circular outline, LED positions and
+rear battery holder come from `board.copper`. Scroll to zoom under the pointer;
+right-drag to pan. Toggle Ratsnest to inspect connectivity. Rough auto-placement
+is available as a preview, but deliberately fixed source poses stay fixed.
+Enable explicit source-lock editing to review a change to a locked component.
+
+Temporary placement is not saved. Persistent pose/geometry edits show an exact
+source diff and require **Save reviewed source**; source Undo/Redo is separate
+from temporary placement history. Imported library/profile content is read-only.
+Edits invalidate previous routed/fill/manufacturing outputs: rerun `make` before
+using them for an order. Editing does not confer production signoff. Ctrl+C stops
+the local editor. `EDITOR_ARGS="--no-browser"` prints a URL without opening it.
+The optional VS Code host uses the same editor core; see the
+[CopperScript extension setup](https://github.com/andenore/CopperScript/tree/main/integrations/vscode).
+
+![CopperScript editor showing the circular source outline, 34 real footprints and unrouted ratsnest](docs/images/mechanical-editor.png)
+
+Editor snapshot: unrouted intent, both sides in shared top-view coordinates (not
+a copper-fill or manufacturing preview). Verified with the committed compiler
+pin, 33 front/1 rear components and zero browser page errors; inspection made no
+source changes. The routed images above remain from the documented build snapshot.
 
 ## Use this project as a template
 
