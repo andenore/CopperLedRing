@@ -9,4 +9,4 @@ dependencies = ["copperscript"]
 package = false
 
 [tool.uv.sources]
-copperscript = { git = "https://github.com/andenore/CopperScript.git", rev = "090b004a97de349c5fd884096183f2b0ce137ddf" }
+copperscript = { git = "https://github.com/andenore/CopperScript.git", rev = "7d44ab5b9392c56214e455df363a57c22fa58e94" }

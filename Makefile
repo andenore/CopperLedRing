@@ -38,7 +38,7 @@ assembly: check
 
 # Native DRC is required; independent CAM qualification is explicitly skipped.
 # No firmware or order submission. Existing successful exports are backed up.
-manufacturing: route verify assembly
+manufacturing: assembly route verify
 	$(UV) run --locked copper export-manufacturing $(PCB) --kicad-cli "$(KICAD_CLI)" --skip-independent-cam --bom $(BUILD)/bom.csv --replace -o $(BUILD)/manufacturing
 
 order: all
