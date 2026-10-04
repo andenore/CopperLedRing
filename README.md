@@ -39,7 +39,10 @@ Fabrication labels are omitted on the front for readability.
 36 vias, 0 DRC violations, 0 isolated islands and 0 unconnected items.** All 31
 ordinary nets route; GND connectivity is independently verified after native
 copper refill. The updated exact-part board passed the locked-dependency routing
-and manufacturing build locally; GitHub runs the same Makefile sequence.
+and manufacturing build both locally and in
+[GitHub run 37186364137](https://github.com/andenore/CopperLedRing/actions/runs/37186364137)
+(source/build revision `b8e60a3`). Its uploaded package was checked for zero native
+violations/opens, all 34 BOM/CPL references, the rear holder and valid checksums.
 The images are from that verified routed result. No hand-routed tracks,
 clearance waivers or via-in-pad permissions are used.
 
