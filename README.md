@@ -155,6 +155,13 @@ source changes. The routed images above remain from the documented build snapsho
 
 ## Use this project as a template
 
+The upgraded compiler pin also passes a fresh profiled routing/manufacturing
+regression in `build/editor-pin-verification`: all 31 ordinary nets route, native
+refill/DRC reports zero violations and zero opens, all 34 reviewed BOM/CPL
+references agree, and all 31 manufacturing-package checksums verify. Independent
+CAM is explicitly skipped and supplier stock is not checked. This confirms file
+generation, not supplier approval or tested assembled hardware.
+
 Fork/copy the repository, change the module identity in `copper.mod`, then edit
 `board.copper` to define your circuit, outline and constraints. Keep build and
 verification logic in CopperScript/KiCad; the Makefile should remain simple.
