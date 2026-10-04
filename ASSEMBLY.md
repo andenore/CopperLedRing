@@ -29,7 +29,7 @@ supplier stock, factory approval, independent CAM qualification or a tested unit
   pitch, keyed position 7 absent. Pin 1=VREF; VREF must not inject power.
 - LED: manufacturer-authored C2286 attachment, revision A.0, 2018-12-06,
   PDF page 2 package/polarity and page 3 ratings. **A=1/K=2**, not generic KiCad
-  K=1/A=2. CopperLib supplies `LED_SMD:KENTO_KT0603R`, preserving cathode-left
+  K=1/A=2. CopperLib supplies the package-owned `KENTO:KENTO_KT0603R`, preserving cathode-left
   nominal IPC 0603 lands with corrected manufacturer terminal numbering.
 - Resistor: UNI-ROYAL V.3, 2019-02-12 ordering code/package/rating tables;
   10 kohm, 1%, 0.1 W, 75 V and centred 0603 lands. Board dissipation is well below
@@ -40,7 +40,7 @@ supplier stock, factory approval, independent CAM qualification or a tested unit
   capacitance/tolerance and dielectric are explicit in the table above.
 
 Reusable exact definitions, concise evidence and hashes live in
-[CopperLib assembly_basics](https://github.com/andenore/CopperLib/tree/main/packages/assembly_basics),
+[CopperLib's canonical reusable part packages](https://github.com/andenore/CopperLib/tree/main/packages/parts),
 not this project or the compiler. Manufacturer-authored PDFs were retrieved from
 official catalogue download links and retained only in ignored library cache.
 The KENTO attachment cover describes “0603-0.6 red”, with the commercial part
