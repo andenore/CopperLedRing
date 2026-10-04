@@ -1,5 +1,7 @@
 # CopperLedRing
 
+[![Board build](https://github.com/andenore/CopperLedRing/actions/workflows/build.yml/badge.svg)](https://github.com/andenore/CopperLedRing/actions/workflows/build.yml)
+
 **A minimal [CopperScript](https://github.com/andenore/CopperScript) example
 project and reusable board-project template.** It is also intended to be a
 direct-order hardware proof of concept: take a qualified release's manufacturing
@@ -9,7 +11,7 @@ circuit first.
 **Current ordering status: DRAFT — no order-ready release exists yet.**
 The source and build are usable as a template now, but generated drafts must not
 be submitted as an assembled-board order. The current circuit has illustrative
-LED/passive selections, routing is not certified complete, and CopperScript's
+LED/passive selections, and CopperScript's
 independent circular-outline CAM release gate is still closed. `make order`
 fails closed; it never labels an inspection artifact as production-ready.
 
@@ -20,31 +22,39 @@ active-low red LEDs, a rear Keystone 3034 CR2032 holder, a 10-pin SMD Cortex-M
 SWD header, and bypass/LDO-support capacitors. This is an LED controller:
 **Bluetooth is not fitted**, and there is no antenna or external crystal.
 
-### Placement previews — not a routed board
+### Routed board — native DRC clean
 
-These are renders of the actual generated KiCad inspection board, not a mockup
+These are renders of the actual GitHub-built KiCad inspection board, not a mockup
 or a photograph of assembled hardware. The front has twelve LEDs around the
 edge, their resistors just inside, the MCU to the left of centre and the SWD
-connector above it. The mirrored rear view shows the battery holder and GND pour.
+connector above it. Both sides have GND pours with disconnected islands removed.
+The mirrored rear view shows the battery holder and rear routes.
 Fabrication labels are omitted on the front for readability.
 
-| Front: copper pads and silkscreen | Rear: mirrored copper, holder outline and GND pour |
+| Front: routed copper, GND fill and silkscreen | Rear: mirrored routes, holder outline and GND fill |
 | --- | --- |
-| ![Front placement preview of the unrouted LED-ring board](docs/images/placement-front.png) | ![Mirrored rear placement preview with battery holder and ground pour](docs/images/placement-back.png) |
+| ![Front of the fully routed LED-ring board with filled ground copper](docs/images/routed-front.png) | ![Mirrored rear of the routed board with battery holder and ground fill](docs/images/routed-back.png) |
 
-**Verified inspection status (2026-10-03, KiCad 10.0.6): 0 tracks, 0 vias,
-0 other DRC violations, and 63 unconnected items.** Native DRC with zone refill
-returned exit code 5. The board is **not fully routed and does not pass signoff**.
-A visible ground pour does not prove that every ground pad is connected. These
-images show the intended placement, not the final routing or an order-ready PCB.
+**Verified routing status (2026-10-04, KiCad 10.0.6): 393 track segments,
+36 vias, 0 DRC violations, 0 isolated islands and 0 unconnected items.** All 31
+ordinary nets route; GND connectivity is independently verified after native
+copper refill. The full locked-dependency build passed both locally and in
+[GitHub Actions](https://github.com/andenore/CopperLedRing/actions/runs/37163778171).
+The images are from that successful GitHub artifact. No hand-routed tracks,
+clearance waivers or via-in-pad permissions are used.
+
+`build/route.json` reports `routing_complete=true` and
+`native_fill_verified=true`, but **`fabrication_ready=false`**. Intent-only GND
+zones remain deferred in the explicit-copper graph; only the native filled-board
+check closes them. Routing completion is not assembly or manufacturing signoff.
 
 The source snapshot's SHA-256 is
-`4c667836e1987ed05b7ffc3a844ec08ff245b59d605ed76d1ddcfb63bf8b708f`
+`bab5a4c369915ac9b5b6b4e705d3d7c65bd103669b21c0a07d288e61452c0024`
 (`board.copper`). Checked-in images are snapshots; regenerate them when the
 source/placement changes. The source build, not these images, remains authoritative.
 
 `board.copper` is the authoritative circuit and mechanical intent, including
-the circular outline, fixed positions/rotations, rear ground pour and
+the circular outline, fixed positions/rotations, front/rear ground pours and
 0.15 mm minimum track/clearance rules. There is no Python placement builder,
 compiler source, test suite, or manually checked-out component library here.
 
@@ -59,7 +69,7 @@ The Python/compiler and CopperLib Git revisions are pinned by the committed
 git clone https://github.com/andenore/CopperLedRing.git
 cd CopperLedRing
 make pcb render             # quick placed/unrouted inspection build
-make                        # attempt complete routing, render and native DRC
+make                        # complete routing, copper refill, native DRC and renders
 ```
 
 The first build automatically downloads CopperScript and CopperLib from their
@@ -80,7 +90,7 @@ Targets:
 | --- | --- |
 | `make check` | Install locked dependencies, fetch/verify CopperLib, run ERC |
 | `make pcb` | Export a placed, unrouted KiCad inspection project |
-| `make route` | Attempt package escapes and detailed routing; profile every run |
+| `make route` | Run package escapes, detailed routing and native fill verification; profile every run |
 | `make render` | Render front/back copper SVGs from the existing PCB |
 | `make verify` | Refill/save copper and reject all native violations and opens |
 | `make order` | Ordering gate; currently blocked, never produces a release |
@@ -124,7 +134,7 @@ Remaining ordering gates:
 The [assembly-pinning trial](ASSEMBLY.md) records three exact JLCPCB candidates
 and the remaining unresolved selections. It is not an orderable BOM or stock check.
 
-- Close every connection and pass both CopperScript and native KiCad checks.
+- Preserve the completed routing/native DRC result when qualifying exact parts.
 - Qualify the circular outline, copper fill and drill outputs independently.
 - Replace illustrative LED/passive definitions with verified orderable parts in
   CopperLib; verify all JLCPCB selections, footprints, rotations and assembly sides.
