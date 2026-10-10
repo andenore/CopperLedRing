@@ -1,10 +1,10 @@
 {
   "board": "RoundLedRing",
-  "electrical_sha256": "d09632d6834447c7c3e15dc1dd161bb8e92f8a9b3252cd407d24cafdc582d870",
+  "electrical_sha256": "46d6f53e683258ef368ec654a6c3b7e9c322881abc7150f63e8a734c383236b0",
   "schema": "copperscript-assembly-lock/v0.1",
   "selections": [
     {
-      "footprint": "Battery:BatteryHolder_Keystone_3034_1x20mm",
+      "footprint": "github.com/andenore/CopperLib/packages/parts/keystone/3034/footprints/Battery.pretty/BatteryHolder_Keystone_3034_1x20mm.kicad_mod",
       "manufacturer": "Keystone Electronics",
       "mpn": "3034",
       "part": "keystone.KEYSTONE_3034",

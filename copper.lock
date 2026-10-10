@@ -1,7 +1,7 @@
 {
   "modules": [
     {
-      "checksum": "sha256:3a45e6fec193cdb2c54bd424d84bacc98cd1cba6c751ec87a0e990c45cd2956b",
+      "checksum": "sha256:f177b11ab8e3da926937a976fafbf4649c59825feb162b6e3e9b1ba79e6d6a37",
       "files": [
         {
           "path": "copper.mod",
@@ -15,7 +15,7 @@
         },
         {
           "path": "packages/circuits/nordic/nrf52832-johanson-reference/assets/nrf52832-johanson-six-layer-trial.json",
-          "sha256": "2af31b661e340aea4a5fadd1f47456a55e1a2e44eb43659d38eec8975f46c5cc",
+          "sha256": "3e435afba3184b175533782e9354d0c228615c44a153d081bf90103926aa0348",
           "size": 12422
         },
         {
@@ -24,9 +24,14 @@
           "size": 2044
         },
         {
+          "path": "packages/generic/can-connector/footprints/TerminalBlock_Phoenix.pretty/TerminalBlock_Phoenix_MKDS-1,5-3_1x03_P5.00mm_Horizontal.kicad_mod",
+          "sha256": "6f33ee2f2716f0fa9e2f02bd530f0a9287c65b215e2ea353baad9e24210949dc",
+          "size": 6324
+        },
+        {
           "path": "packages/generic/can-connector/part.copper",
-          "sha256": "a4ca9837e91d5fd0c9d03f60487a210b00633b15ce741d5b63ab9f7c6a08b9ab",
-          "size": 500
+          "sha256": "bdcbe1d348f580f5dbc2ca2fb3e65b90e7adffba84e00279a372a977ea6fe045",
+          "size": 528
         },
         {
           "path": "packages/generic/debug-uart-header/part.copper",
@@ -89,9 +94,14 @@
           "size": 1253
         },
         {
+          "path": "packages/parts/coilcraft/xal4020/footprints/Inductor_SMD.pretty/L_Coilcraft_XAL4020-XXX.kicad_mod",
+          "sha256": "29c76498b592cb7e35662f2ccd00e340488272b7b30b3777b0331b325ac70bd4",
+          "size": 2175
+        },
+        {
           "path": "packages/parts/coilcraft/xal4020/part.copper",
-          "sha256": "004d96510d7d3f362a7fd625799e59b73810b48e5ae235f21c406f6bad44005c",
-          "size": 627
+          "sha256": "ac3fb59a51e3d5e91e74111691b0be3b46a56869c7e1f04c2607a51fb83ec8d8",
+          "size": 655
         },
         {
           "path": "packages/parts/fenghua/0402cg/part.copper",
@@ -99,14 +109,24 @@
           "size": 781
         },
         {
+          "path": "packages/parts/gct/sim8060/footprints/Connector_Card.pretty/nanoSIM_GCT_SIM8060-6-0-14-00.kicad_mod",
+          "sha256": "b5badb647a0646d2ab52cd647f4c1e1178be2f108bcc703ca98d876828375c67",
+          "size": 9086
+        },
+        {
           "path": "packages/parts/gct/sim8060/part.copper",
-          "sha256": "894656bb3c78261ce383ddd22dd9599c6527c5af4718e15ae86b1a7de15756f3",
-          "size": 919
+          "sha256": "0d9adab35a5d60ece464f3f6a1fe7f3c5a2385f42dfc5df5a7ac5626bb82daab",
+          "size": 947
+        },
+        {
+          "path": "packages/parts/gct/usb4135/footprints/Connector_USB.pretty/USB_C_Receptacle_GCT_USB4135-GF-A_6P_TopMnt_Horizontal.kicad_mod",
+          "sha256": "e760638c49ff1fe0cec8f838dc2fa1c62cb7fbcef74070e23b64f4c7e6ab209c",
+          "size": 6639
         },
         {
           "path": "packages/parts/gct/usb4135/part.copper",
-          "sha256": "1b26ec9de320e690d47bb6259d0b75f1a1c42b224b49f87cee187f156d6c8af9",
-          "size": 918
+          "sha256": "0dd14f0fcb0d4c5959b488a12bfc9463f84e7ef1ee6669d9f3a838ab100075f7",
+          "size": 946
         },
         {
           "path": "packages/parts/johanson/2450at18a0100001e/evidence/rf-audit.json",
@@ -129,9 +149,14 @@
           "size": 850
         },
         {
+          "path": "packages/parts/keystone/3034/footprints/Battery.pretty/BatteryHolder_Keystone_3034_1x20mm.kicad_mod",
+          "sha256": "4e14fbc5978ec4bbb9b403f665a880533ba1a038868a9eb711ca83fad052c715",
+          "size": 9661
+        },
+        {
           "path": "packages/parts/keystone/3034/part.copper",
-          "sha256": "66b3a114fca6a92874175bd94cd6a337a38492aead7a8c9defb384a4051f4c3c",
-          "size": 1012
+          "sha256": "28432c0c7934f696d00bb9e267ccc5758f3ed0eb717798dc4a985f12c5cca62d",
+          "size": 1040
         },
         {
           "path": "packages/parts/nordic/nrf52832/device.copper",
@@ -189,9 +214,14 @@
           "size": 3328
         },
         {
+          "path": "packages/parts/ti/tcan334g/footprints/Package_SO.pretty/VSSOP-8_3x3mm_P0.65mm.kicad_mod",
+          "sha256": "257b5da45d5e052e177c135f3ccfe302fd90fd21e8dfa58342abbd4936e2751c",
+          "size": 6244
+        },
+        {
           "path": "packages/parts/ti/tcan334g/part.copper",
-          "sha256": "97c366dcac21debc335320d9f5ca389545f0470477b9e3150a0c1a1f10725333",
-          "size": 1174
+          "sha256": "7508693369a2de0e4b88618af76f18b9dfdaac5ed5dbd93c0915a98636983ee2",
+          "size": 1202
         },
         {
           "path": "packages/parts/ti/tps62130a/part.copper",
@@ -229,19 +259,24 @@
           "size": 12437
         },
         {
+          "path": "packages/profiles/raspberry_pi/cm4/footprints/Connector_Hirose_DF40.pretty/Hirose_DF40C-100DS-0.4V_2x50_P0.4mm.kicad_mod",
+          "sha256": "87b2d319bb2f74e76f24d1240acc7447e99dd7cb4d966cb3fdec784d1f8ea281",
+          "size": 26264
+        },
+        {
           "path": "packages/profiles/raspberry_pi/cm4/gpio_socket.copper",
-          "sha256": "46141dbaa6d455646786d0e0c43a3de2d628d3e6998ce6b41e3fe9a1c4ff3edb",
-          "size": 11507
+          "sha256": "3c093c6634ba9081eb641f16c914c94eb321faa63f771a02403a5dbeebab054f",
+          "size": 11535
         },
         {
           "path": "packages/profiles/raspberry_pi/cm4/high_speed_socket.copper",
-          "sha256": "584448f41b664cd85b603db540f4c5da8ecfc3cdee469a67022119f1d2434ad8",
-          "size": 11385
+          "sha256": "3f9c08c099735d4e5d2f6ac7b26e4e298a2b0fc30f0acd8deda066fc474e0adc",
+          "size": 11413
         },
         {
           "path": "packages/profiles/raspberry_pi/cm4/mounting.copper",
-          "sha256": "933afcc2bfb9e22b379905a7a4452a1e27be6b21c4387d9a72c573a962b9c08c",
-          "size": 1783
+          "sha256": "f46543d0f963de17bda87231740c9aaf03381ac07170a812d4c7bc8f7c2ac88e",
+          "size": 1839
         },
         {
           "path": "tests/fixtures/compiler_smoke.copper",
@@ -251,7 +286,7 @@
       ],
       "module": "github.com/andenore/CopperLib",
       "source": "git:https://github.com/andenore/CopperLib.git",
-      "version": "5deebc3a84a8d4be67d32eaec520b9bba6a1a2d6"
+      "version": "89c8d6192cbe8d065681527767c00714acd48901"
     }
   ],
   "schema": "copperscript.package-lock/v1"

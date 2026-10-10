@@ -2,8 +2,13 @@
 .DEFAULT_GOAL := all
 .NOTPARALLEL:
 UV ?= uv
+ifeq ($(OS),Windows_NT)
+KICAD_CLI ?= $(ProgramW6432)/KiCad/10.0/bin/kicad-cli.exe
+FOOTPRINT_ROOT ?= $(ProgramW6432)/KiCad/10.0/share/kicad/footprints
+else
 KICAD_CLI ?= kicad-cli
 FOOTPRINT_ROOT ?= /usr/share/kicad/footprints
+endif
 BOARD := board.copper
 BUILD := build
 PCB := $(BUILD)/board.kicad_pcb
