@@ -15,6 +15,19 @@ qualification is explicitly skipped; firmware is outside scope. Before submittin
 an order, check supplier availability, BOM matching and the assembled preview.
 Generated files are not a stock reservation, factory approval or a tested unit.
 
+For a current shared-solver review without upgrading the pinned build, activate
+the current CopperScript environment and run:
+
+```console
+make route-review REVIEW_COPPER="python -m copperscript" REVIEW_DIR=build/review-new
+```
+
+The directory must be new. Only the standard shared CLI is used, with bounded
+placement/access/repair and native-fill feedback; no selected-net or pad repair
+script is involved. On 2026-10-11 this path connected all 31 ordinary nets and
+passed KiCad 10.0.6 refill/DRC with zero opens and zero violations. These are local
+review results, not a new pinned compiler release, CAM or hardware qualification.
+
 ## The board
 
 A 50 mm circular, two-layer board with an nRF52832 QFAA controlling twelve
