@@ -1,5 +1,8 @@
 # CopperLedRing
 
+LLM agents: start with `copper agent-guide` in the selected CopperScript
+environment; see [the project pointer](AGENTS.md) and retain it in new projects.
+
 [![Board build](https://github.com/andenore/CopperLedRing/actions/workflows/build.yml/badge.svg)](https://github.com/andenore/CopperLedRing/actions/workflows/build.yml)
 
 **A minimal [CopperScript](https://github.com/andenore/CopperScript) example
