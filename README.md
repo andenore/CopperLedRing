@@ -5,224 +5,244 @@ environment; see [the project pointer](AGENTS.md) and retain it in new projects.
 
 [![Board build](https://github.com/andenore/CopperLedRing/actions/workflows/build.yml/badge.svg)](https://github.com/andenore/CopperLedRing/actions/workflows/build.yml)
 
-**A minimal [CopperScript](https://github.com/andenore/CopperScript) example
-project and reusable board-project template.** It is also intended to be a
-direct-order hardware proof of concept: take a release's manufacturing
-and assembly files, order the board, and try the design without writing your own
-circuit first.
+A minimal [CopperScript](https://github.com/andenore/CopperScript) example and
+reusable board-project template: twelve independent red LEDs on a 50 mm circular,
+two-layer board, controlled by an nRF52832 QFAA. The rear holds a Keystone 3034
+CR2032 holder; a 10-pin SMD Cortex-M header provides SWD. **Bluetooth is not
+fitted**: there is no antenna or external crystal.
 
-**Manufacturing target: assembled, unprogrammed hardware.** `make order` builds
-the complete routed board, checks native KiCad DRC, validates all 34 exact BOM
-selections and generates manufacturing/assembly files. Independent CAM
-qualification is explicitly skipped; firmware is outside scope. Before submitting
-an order, check supplier availability, BOM matching and the assembled preview.
-Generated files are not a stock reservation, factory approval or a tested unit.
+The front now carries the CopperScript Cu logo, name and compiler version in
+**exposed copper**. This branded source is an inspection build. All 31 ordinary
+nets route, and KiCad 10.0.6 refill/DRC reports zero violations and zero opens,
+but `fabrication_ready=false`: copper glyph geometry, filled-artwork minimum
+features and exposed-mask registration/slivers still lack qualification.
+Native DRC does not close those checks or approve an order.
 
-For a current shared-solver review without upgrading the pinned build, activate
-the current CopperScript environment and run:
+CopperScript silkscreen support is pinned to commit
+`081ace9ad9af6ba6b0f186195b7ba6efdd69dfa5`; CopperLib is pinned to
+`91e6d6cb11273ec9ce26f2181f4a081e6ef7e16a`. The locked `make` targets and CI
+build the branded source with these exact revisions. This snapshot routes all
+31 ordinary nets and passes native KiCad DRC, while `fabrication_ready=false`:
+copper glyph geometry, filled-artwork feature widths and exposed-mask
+registration/slivers still lack qualification. Native DRC does not close those
+checks or approve an order. Old manufacturing files and release evidence do not
+apply to the updated dependency locks.
 
-```console
-make route-review REVIEW_COPPER="python -m copperscript" REVIEW_DIR=build/review-new
+## Copper branding
+
+The artwork is declared directly in [board.copper](board.copper):
+
+```copper
+silkscreen {
+    branding {
+        position = (27mm, 29mm);
+        size = 8mm;
+        layout = stacked;
+        side = front;
+        material = copper;
+        exposed = true;
+    }
+}
 ```
 
-The directory must be new. Only the standard shared CLI is used, with bounded
-placement/access/repair and native-fill feedback; no selected-net or pad repair
-script is involved. On 2026-10-11 this path connected all 31 ordinary nets and
-passed KiCad 10.0.6 refill/DRC with zero opens and zero violations. These are local
-review results, not a new pinned compiler release, CAM or hardware qualification.
+`position` is the logo centre. The 8 mm logo has compact 0.8 mm name/version
+labels below it. `material = copper` selects `F.Cu`; `exposed = true` adds matching
+`F.Mask` openings without paste. The artwork is floating and adds no electrical
+net, component or BOM item. Shared placement/routing reserves clearance around
+it, including clearance from the GND pour. All 34 component poses remain fixed.
 
-## The board
+The version is captured from the compiler package at build time, rather than
+hard-coded into this board. The package version is `v0.1.0`; use the exact Git
+revision in [figure provenance](docs/images/branding-build.json) to identify the
+compiler source and its native validation results.
 
-A 50 mm circular, two-layer board with an nRF52832 QFAA controlling twelve
-active-low red LEDs, a rear Keystone 3034 CR2032 holder, a 10-pin SMD Cortex-M
-SWD header, and bypass/LDO-support capacitors. This is an LED controller:
-**Bluetooth is not fitted**, and there is no antenna or external crystal.
+To omit the default branding, replace its declaration with
+`branding { enabled = false; }`. To print it in ordinary silkscreen instead,
+set `material = silkscreen; exposed = false;`. Authored artwork and footprint
+silkscreen remain when branding is disabled.
 
-### Routed board — native DRC clean
+## Routed board
 
-These are renders of the actual locked-build KiCad board, not a mockup
-or a photograph of assembled hardware. The front has twelve LEDs around the
-edge, their resistors just inside, the MCU to the left of centre and the SWD
-connector above it. Both sides have GND pours with disconnected islands removed.
-The mirrored rear view shows the battery holder and rear routes.
-Fabrication labels are omitted on the front for readability.
+These are exports of the freshly routed and refilled branded KiCad board,
+not photographs of assembled hardware. Front copper is red, rear copper is
+blue; both sides have GND pours with disconnected islands removed. The front
+shows the isolated Cu mark and its labels below the SWD header. The mirrored
+rear shows the battery-holder outline and new routes. Fabrication labels are
+omitted on the front for readability. Layer colours do not depict solder-mask
+colour or the chosen copper finish.
 
-| Front: routed copper, GND fill and silkscreen | Rear: mirrored routes, holder outline and GND fill |
+| Front: copper branding, routes, GND fill and silkscreen | Rear: mirrored copper, holder outline and GND fill |
 | --- | --- |
-| ![Front of the fully routed LED-ring board with filled ground copper](docs/images/routed-front.png) | ![Mirrored rear of the routed board with battery holder and ground fill](docs/images/routed-back.png) |
+| ![Front of CopperLedRing with exposed copper Cu logo, CopperScript name and version](docs/images/routed-front.png) | ![Mirrored rear of the branded CopperLedRing build with battery holder and ground fill](docs/images/routed-back.png) |
 
-The images show the locked-build source snapshot identified below. Current
-shared-solver review status is recorded above; regenerate images for changed
-source/placement. No hand routing, clearance waiver or via-in-pad permission is
-part of the build.
+Vector figures: [front SVG](docs/images/routed-front.svg),
+[rear SVG](docs/images/routed-back.svg).
 
-`build/route.json` reports `routing_complete=true` and
-`native_fill_verified=true`, but **`fabrication_ready=false`**. Intent-only GND
-zones remain deferred in the explicit-copper graph; only the native filled-board
-check closes them. Routing completion is not assembly or manufacturing signoff.
+Snapshot built on 2026-10-12 from `board.copper` SHA-256
+`364fb87637711bd899a2606120ba53cd15aee73c4f65df987d593f314698a9ea`. The standard balanced `route-board` pipeline with the updated locks produced 275 tracks
+and 39 vias; all 31 ordinary nets routed, and native fill closed the deferred
+GND connectivity. The retained report has `routing_complete=true`,
+`native_fill_verified=true` and **`fabrication_ready=false`**. Its Physical-IR
+DRC coverage remains incomplete for artwork even though native DRC passes.
+No hand routing, clearance waiver or via-in-pad permission was used.
 
-The source snapshot's SHA-256 is
-`c2820b7bb9bbd576815a3ab3f9bbe948c3cd2f861266afea02920870946c487d`
-(`board.copper`). Checked-in images are snapshots; regenerate them when the
-source/placement changes. The source build, not these images, remains authoritative.
+Figures are snapshots. Source/placement/compiler changes invalidate the old
+routing, fill, manufacturing and image evidence. The source and freshly generated
+reports remain authoritative.
 
-`board.copper` is the authoritative circuit and mechanical intent, including
-the circular outline, fixed positions/rotations, front/rear ground pours and
-0.15 mm minimum track/clearance rules. There is no Python placement builder,
-compiler source, test suite, or manually checked-out component library here.
+## Build and regenerate figures
 
-## Build from a fresh checkout
+Install Git, Python 3.12.15, [uv 0.13.0](https://github.com/astral-sh/uv/releases/tag/0.13.0), GNU Make and KiCad 10 with standard
+footprint libraries. `uv.lock` pins CopperScript commit
+`081ace9ad9af6ba6b0f186195b7ba6efdd69dfa5`; `copper.mod` and `copper.lock`
+pin CopperLib commit `91e6d6cb11273ec9ce26f2181f4a081e6ef7e16a`. Run
+`uv sync --locked` and `make check` to validate those pins. Generic placement,
+routing and validation stay in CopperScript/KiCad; there is no board-specific
+repair script or local library replacement. CI uses KiCad 10.0.7; the figures
+and native DRC snapshot here were generated with KiCad 10.0.6.
 
-Install Git, [uv](https://docs.astral.sh/uv/), GNU Make and KiCad 10
-with its standard footprint libraries. The inspected baseline uses KiCad 10.0.6.
-The Python/compiler and CopperLib Git revisions are pinned by the committed
-`uv.lock`, `copper.mod` and `copper.lock`.
+After `uv sync --locked`, run the standard bounded review from this repository:
 
 ```sh
-git clone https://github.com/andenore/CopperLedRing.git
-cd CopperLedRing
-make pcb render             # quick placed/unrouted inspection build
-make                        # route, refill, native DRC, BOM/CPL, manufacturing files and renders
-make order                  # same build, plus a reminder of the upload files
+make route-review REVIEW_COPPER=".venv/bin/python -m copperscript" REVIEW_DIR=build/branding-review-new
 ```
 
-The first build automatically downloads CopperScript and CopperLib from their
-pinned GitHub revisions. **Neither repository needs to be checked out manually.**
-Later CopperLib operations are locked/offline; footprint geometry comes from
-the installed KiCad libraries. No local dependency replacements are used.
+`REVIEW_DIR` must be new. This command uses the projectâ€™s locked compiler and
+UV pins. Review `route.json` and `route.summary.json`, including their
+completeness and `fabrication_ready` fields: a routing pass is not
+fabrication/assembly signoff.
 
-Windows (PowerShell with GNU Make on PATH):
+Windows, using the locked local environment:
 
 ```powershell
-make pcb render KICAD_CLI="C:/Program Files/KiCad/10.0/bin/kicad-cli.exe" FOOTPRINT_ROOT="C:/Program Files/KiCad/10.0/share/kicad/footprints"
-make KICAD_CLI="C:/Program Files/KiCad/10.0/bin/kicad-cli.exe" FOOTPRINT_ROOT="C:/Program Files/KiCad/10.0/share/kicad/footprints"
+$env:KICAD_PYTHON = "C:/Program Files/KiCad/10.0/bin/python.exe"
+make route-review REVIEW_COPPER=".venv/Scripts/python.exe -m copperscript" REVIEW_DIR=build/branding-review-new KICAD_CLI="C:/Program Files/KiCad/10.0/bin/kicad-cli.exe" FOOTPRINT_ROOT="C:/Program Files/KiCad/10.0/share/kicad/footprints"
 ```
 
-Targets:
+Refill/save the resulting candidate and check native DRC before exporting the
+same README layer combinations (on Windows substitute the executable path):
+
+```sh
+kicad-cli pcb drc --refill-zones --save-board --format json --severity-all --exit-code-violations -o build/branding-review-new/drc.json build/branding-review-new/candidate.kicad_pcb
+kicad-cli pcb export svg --layers F.Cu,F.Silkscreen,Edge.Cuts --mode-single --fit-page-to-board --exclude-drawing-sheet --check-zones -o build/branding-review-new/readme-front.svg build/branding-review-new/candidate.kicad_pcb
+kicad-cli pcb export svg --layers B.Cu,B.Fab,B.Silkscreen,Edge.Cuts --mirror --mode-single --fit-page-to-board --exclude-drawing-sheet --check-zones -o build/branding-review-new/readme-back.svg build/branding-review-new/candidate.kicad_pcb
+```
+
+The committed PNGs are 300 dpi rasterizations of these SVGs on white, using
+Sharp (version recorded in the provenance). With Node.js and Sharp installed:
+
+```sh
+node -e "require('sharp')(process.argv[1], {density:300}).flatten({background:'#ffffff'}).png().toFile(process.argv[2])" build/branding-review-new/readme-front.svg docs/images/routed-front.png
+node -e "require('sharp')(process.argv[1], {density:300}).flatten({background:'#ffffff'}).png().toFile(process.argv[2])" build/branding-review-new/readme-back.svg docs/images/routed-back.png
+```
+
+Copy the corresponding SVGs to `docs/images/routed-front.svg` and
+`docs/images/routed-back.svg`, and update the snapshot hash/provenance with the
+new reports. Generated PCB/projects, footprint tables, reports and intermediate
+SVGs stay under ignored `build/`. A failed native check is a failed check;
+available draft renders are inspection artifacts.
+
+## Pinned build targets
+
+`pyproject.toml` and `uv.lock` pin CopperScript to the published silkscreen
+implementation; `copper.mod` and `copper.lock` pin the matching CopperLib
+snapshot. CI uses pinned GitHub Actions, Python 3.12.15, uv 0.13.0 and KiCad
+10.0.7. The local figure snapshot was checked with KiCad 10.0.6. These build
+pins reproduce routing and native DRC, but they do not qualify copper artwork
+for fabrication or assembly.
 
 | Target | Purpose |
 | --- | --- |
-| `make check` | Install locked dependencies, fetch/verify CopperLib, run ERC |
+| `make check` | Install locked dependencies, fetch/verify CopperLib and run ERC |
 | `make pcb` | Export a placed, unrouted KiCad inspection project |
-| `make edit` | Open CopperScript's shared mechanical/floorplan editor with real footprints |
-| `make route` | Run package escapes, detailed routing and native fill verification; profile every run |
-| `make render` | Render front/back copper SVGs from the existing PCB |
-| `make verify` | Refill/save copper and reject all native violations and opens |
+| `make edit` | Open the shared mechanical/floorplan editor with real footprints |
+| `make route` | Run package escapes, routing and native fill verification; profile the run |
+| `make route-review` | Run the locked compiler through the standard bounded review |
+| `make render` | Export copper SVGs from the existing `build/board.kicad_pcb` |
+| `make verify` | Refill/save that board and reject native violations and opens |
 | `make assembly` | Validate exact selections and export the JLCPCB BOM |
-| `make manufacturing` | Route and verify, then export manufacturing files and both-side CPL |
-| `make order` | Complete build and print supplier-upload reminders; does not place an order |
+| `make manufacturing` | Route/verify and export manufacturing files and both-side CPL |
+| `make order` | Build and print upload reminders; never submits an order |
 
-Generated KiCad files/local footprint tables, SVGs, routing/DRC reports and
-`route.pstats` stay under ignored `build/`. Use `make render` to inspect a
-draft left by a failed routing attempt. A nonzero exit is a failed check, not a
-successful build. Do not use `make -i` to prepare an order. Routing can take
-considerably longer than the inspection build.
-
-For the README preview layer combinations, export from an existing inspection
-build using KiCad (on Windows, use the executable path shown above):
-
-```sh
-kicad-cli pcb export svg --layers F.Cu,F.Silkscreen,Edge.Cuts --mode-single --fit-page-to-board --exclude-drawing-sheet --check-zones -o build/readme-front.svg build/board.kicad_pcb
-kicad-cli pcb export svg --layers B.Cu,B.Fab,B.Silkscreen,Edge.Cuts --mirror --mode-single --fit-page-to-board --exclude-drawing-sheet --check-zones -o build/readme-back.svg build/board.kicad_pcb
-```
-
-The committed PNGs are rasterizations of those SVGs on a white background.
+The normal pinned build downloads the compiler and library from their committed
+GitHub revisions without manual checkouts. The same locked compiler supports the
+silkscreen and copper artwork used in this board.
 
 ## Mechanical and placement editor
 
+The source includes the circular outline, deliberately fixed front/rear poses,
+GND zones and 0.15 mm minimum track/clearance rules. To inspect this source with the locked compiler, run:
+
 ```sh
-make edit
+make edit EDITOR_PYTHON=".venv/bin/python"
 ```
 
-On Windows:
+On Windows use `EDITOR_PYTHON=".venv/Scripts/python.exe"` and
+add `FOOTPRINT_ROOT="C:/Program Files/KiCad/10.0/share/kicad/footprints"`.
+Scroll to zoom under the pointer; right-drag to pan. Toggle Ratsnest to inspect
+connectivity. Rough auto-placement is a preview and deliberately fixed poses
+stay fixed. Source-lock editing allows a reviewed change to a locked component.
 
-```powershell
-make edit FOOTPRINT_ROOT="C:/Program Files/KiCad/10.0/share/kicad/footprints"
-```
-
-This uses the pinned compiler from GitHub, not a local CopperScript checkout or
-project-specific editor script. The board's circular outline, LED positions and
-rear battery holder come from `board.copper`. Scroll to zoom under the pointer;
-right-drag to pan. Toggle Ratsnest to inspect connectivity. Rough auto-placement
-is available as a preview, but deliberately fixed source poses stay fixed.
-Enable explicit source-lock editing to review a change to a locked component.
-
-Temporary placement is not saved. Persistent pose/geometry edits show an exact
-source diff and require **Save reviewed source**; source Undo/Redo is separate
-from temporary placement history. Imported library/profile content is read-only.
-Edits invalidate previous routed/fill/manufacturing outputs: rerun `make` before
-using them for an order. Editing does not confer production signoff. Ctrl+C stops
-the local editor. `EDITOR_ARGS="--no-browser"` prints a URL without opening it.
-The optional VS Code host uses the same editor core; see the
-[CopperScript extension setup](https://github.com/andenore/CopperScript/tree/main/integrations/vscode).
-
-![CopperScript editor showing the circular source outline, 34 real footprints and unrouted ratsnest](docs/images/mechanical-editor.png)
-
-Editor snapshot: unrouted intent, both sides in shared top-view coordinates (not
-a copper-fill or manufacturing preview). Verified with the committed compiler
-pin, 33 front/1 rear components and zero browser page errors; inspection made no
-source changes. The routed images above remain from the documented build snapshot.
+Temporary placement is not saved. Persistent edits show an exact source diff
+and require **Save reviewed source**; source Undo/Redo is separate from temporary
+placement history. Imported library/profile content is read-only. Source edits
+invalidate previous routing/fill/manufacturing evidence. The editor is not an
+artwork CAM or assembled-board preview. Ctrl+C stops the server;
+`EDITOR_ARGS="--no-browser"` prints its URL.
+See the [VS Code extension](https://github.com/andenore/CopperScript/tree/main/integrations/vscode)
+for the optional editor host.
 
 ## Use this project as a template
 
 Fork/copy the repository, change the module identity in `copper.mod`, then edit
-`board.copper` to define your circuit, outline and constraints. Keep build and
-verification logic in CopperScript/KiCad; the Makefile should remain simple.
-Reusable part/device definitions belong in [CopperLib](https://github.com/andenore/CopperLib)
-or another URL-imported library, not inside the compiler or a copied fixture.
-Keep full commit pins and regenerate/review locks intentionally when upgrading.
+`board.copper` for circuit, outline, artwork and constraints. Keep the AGENTS
+pointer and shared build/review workflow. Reusable parts/devices belong in
+[CopperLib](https://github.com/andenore/CopperLib) or another URL-imported library.
+Use full commit pins and review lock changes when upgrading. Artwork clearance
+and qualification need a new review for each board.
 
-## Order the proof of concept
+## Manufacturing and assembly target
 
-Run `make order` from a fresh checkout. The authoritative output is
-`build/manufacturing/`:
+The intended target is assembled, unprogrammed experimental hardware. The
+branded source has not reached that target because artwork qualification remains
+incomplete; complete the outstanding checks before preparing or tagging an order
+build. Old packages are not valid for the branding update. Independent CAM is
+explicitly skipped in this example workflow, and firmware remains outside scope.
 
-- `gerbers-drill.zip`: all copper, mask, silkscreen, paste and circular-outline
-  Gerbers plus separate plated/nonplated metric drill files. Upload for fabrication.
-- `bom.csv`: grouped JLCPCB selections for 34 components / nine exact MPNs.
-- `cpl.csv`: placement coordinates/rotations for all 34 parts, including the rear
-  battery holder. Upload BOM and CPL for assembly.
-- `manufacturing-package.zip`: complete package, including the native PCB/project,
-  local footprints, IPC-D-356 netlist, native positions, DRC report, manifest and
-  checksums. Archive this with the source revision and ordering choices.
+A future successfully verified build's `build/manufacturing/` contains:
 
-Native DRC and exact-selection checks are mandatory. Independent CAM qualification
-is **not** required for this example; the manifest explicitly records it as skipped.
-Repeat exports retain previous successful directories as ignored
-`.manufacturing-previous-*` siblings. `make order` does not purchase or submit an order.
-GNU Make is required; the same recipe runs in GitHub on Linux.
+- `gerbers-drill.zip`: copper, mask, silkscreen, paste and circular-outline
+  Gerbers with separate plated/nonplated metric drills.
+- `bom.csv`: grouped exact JLCPCB selections for 34 components / nine MPNs.
+- `cpl.csv`: coordinates/rotations for all 34 parts, including the rear holder.
+- `manufacturing-package.zip`: PCB/project, local footprints, IPC-D-356 netlist,
+  native positions, DRC report, manifest and checksums.
 
-The [assembly review](ASSEMBLY.md) documents exact reusable CopperLib parts,
-manufacturer polarity/footprint mappings and procurement codes. There are no
-remaining placeholder LED/passive selections. Firmware is not a build gate.
+The [assembly review](ASSEMBLY.md) records exact reusable parts, polarity,
+footprint mappings and procurement codes. Check supplier stock, BOM matching,
+mask openings over the copper mark, copper finish and assembly preview for the
+actual order. Files are not stock reservations, supplier approvals or tested
+hardware. The expected board is two-layer, 50 mm circular, 1.6 mm FR-4 with
+front/rear assembly; confirm copper weight, finish, stencil/process settings
+and double-sided assembly in the quotation. Inspect MCU/SWD pin 1, LED cathodes
+and battery polarity/side. Supplier rotation corrections/substitutions are not
+guessed. Supply the CR2032 separately.
 
-Use two-layer, 50 mm circular FR-4 with the PCB's 1.6 mm thickness and populated
-front/rear sides. Confirm copper weight, finish, solder mask, stencil/process
-settings and double-sided assembly in the supplier's quotation. Check current
-stock for the chosen quantity and inspect the upload preview: MCU/SWD pin 1,
-LED cathodes and battery-holder polarity/side. No automatic supplier-specific
-rotation corrections or substitutions are guessed. Supply the CR2032 separately.
-
-Do not assume battery supply or firmware programming is included in PCBA.
-This repository currently contains no firmware. The proof-of-concept user must
-supply the CR2032 and program the MCU over SWD unless a qualified ordering guide
-explicitly includes those services. The primary cell is **not rechargeable**:
-SWD VREF is sense-only; never inject debugger power with the cell installed.
-Firmware must keep the radio, NFC, HFXO and DC/DC disabled as appropriate and use
-the internal clocks/LDO configuration. GPIO output LOW illuminates an LED.
+There is no firmware here. Program over SWD and supply the cell yourself unless
+a qualified ordering guide explicitly includes those services. The CR2032 is
+**not rechargeable**: SWD VREF is sense-only; never inject debugger power with
+the cell installed. Firmware must keep radio, NFC, HFXO and DC/DC disabled as
+appropriate and use internal clocks/LDO operation. GPIO LOW illuminates an LED.
 
 ## GitHub artifacts
 
-Every push to `main`, pull request, manual run and `v*` tag runs the full `make`
-workflow: routing, native KiCad DRC/connectivity checks, assembly selection checks,
-manufacturing/assembly exports and layer rendering.
-Routing is not an optional manual/tag-only step. Any routing failure, DRC
-violation or open connection fails the job. Failed runs retain native diagnostics
-and available layer previews as inspection artifacts, never as successful boards.
-Successful runs upload a separate `CopperLedRing-manufacturing-<sha>` artifact;
-failed builds publish diagnostics only. `v*` tags additionally publish all generated
-manufacturing files as an experimental prerelease, clearly labelled as unprogrammed
-hardware with independent CAM qualification skipped. Supplier preview/availability
-review is still required before ordering. Do not tag an unverified build.
+The workflow runs the full pinned `make` build on pushes/PRs/manual runs and
+`v*` tags using the compiler/library pins described above. Failed runs retain
+diagnostics and available previews as inspection artifacts. Local validation
+used KiCad 10.0.6; CI is configured for KiCad 10.0.7.
+Manufacturing artifacts and experimental prereleases require the successful
+build gates. Do not tag this unqualified artwork update or present earlier
+release files as the branded board.
 
-MIT license. Experimental hardware; verify supplier preview and availability before ordering.
+MIT license. Experimental hardware; verify the applicable engineering,
+fabrication and assembly evidence before ordering.

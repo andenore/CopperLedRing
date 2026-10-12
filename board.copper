@@ -110,6 +110,18 @@ board RoundLedRing {
     constraint fixed_placement(C_BULK) { x = 14.5mm; y = 20mm; rotation = 0; side = front; }
     constraint fixed_placement(R_RESET) { x = 8.5mm; y = 30mm; rotation = 0; side = front; }
 
+    // Exposed, floating front copper; the shared router reserves its clearance.
+    // The Cu mark, CopperScript name and compiler version share this material.
+    silkscreen {
+        branding {
+            position = (27mm, 29mm);
+            size = 8mm;
+            layout = stacked;
+            side = front;
+            material = copper;
+            exposed = true;
+        }
+    }
     mechanical {
         outline circle { center = (25mm, 25mm); diameter = 50mm; }
         rules {
