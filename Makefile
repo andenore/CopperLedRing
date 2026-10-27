@@ -38,13 +38,13 @@ edit: fetch
 # Retained pinned build; review the shared solver without changing its lockfile.
 route: pcb
 	$(UV) run --locked python -c "from pathlib import Path; Path('$(BUILD)').mkdir(exist_ok=True)"
-	$(UV) run --locked python -m cProfile -o $(BUILD)/route.pstats -m copperscript route-board $(BOARD) --locked --offline --layers 2 --candidates 1 --footprint-root "$(FOOTPRINT_ROOT)" --pitch-mm 0.5 --minimum-repair-pitch-mm 0.1 --passes 3 --search-budget 50000 --heuristic-weight 200 --fanout --fanout-maze --soft-ripup --constrained-pins-first --progressive-guides --early-plane-stitch --stitch-surface-zones --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3 --package-access-trials 0 --zone-escape-trials 0 --zone-local-ripup-trials 0 --progress --verify-plane-fill "$(KICAD_CLI)" --report $(BUILD)/route.json -o $(PCB)
+	$(UV) run --locked python -m cProfile -o $(BUILD)/route.pstats -m copperscript route-board $(BOARD) --locked --offline --layers 2 --candidates 1 --footprint-root "$(FOOTPRINT_ROOT)" --fanout --fanout-maze --early-plane-stitch --stitch-surface-zones --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3 --progress --verify-plane-fill "$(KICAD_CLI)" --report $(BUILD)/route.json -o $(PCB)
 
 # Only design inputs and shared CLI options; no project-local routing algorithm.
 route-review:
 	$(if $(strip $(REVIEW_COPPER)),,$(error Set REVIEW_COPPER to a current CopperScript command; this target does not upgrade pinned dependencies))
 	$(UV) run --locked python -c "from pathlib import Path; Path('$(REVIEW_DIR)').mkdir(parents=True, exist_ok=False)"
-	$(REVIEW_COPPER) route-board $(BOARD) --locked --offline --layers 2 --footprint-root "$(FOOTPRINT_ROOT)" --routing-profile $(REVIEW_PROFILE) --pitch-mm 0.5 --fanout-maze --soft-ripup --constrained-pins-first --progressive-guides --stitch-surface-zones --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3 --verify-plane-fill "$(KICAD_CLI)" --native-evidence-directory "$(REVIEW_DIR)/native" --report "$(REVIEW_DIR)/route.json" -o "$(REVIEW_DIR)/candidate.kicad_pcb" --progress
+	$(REVIEW_COPPER) route-board $(BOARD) --locked --offline --layers 2 --footprint-root "$(FOOTPRINT_ROOT)" --routing-profile $(REVIEW_PROFILE) --fanout-maze --stitch-surface-zones --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3 --verify-plane-fill "$(KICAD_CLI)" --native-evidence-directory "$(REVIEW_DIR)/native" --report "$(REVIEW_DIR)/route.json" -o "$(REVIEW_DIR)/candidate.kicad_pcb" --progress
 
 render:
 	"$(KICAD_CLI)" pcb export svg --layers F.Cu,B.Cu --common-layers Edge.Cuts --mode-multi --fit-page-to-board --exclude-drawing-sheet --check-zones -o $(BUILD)/layers/ $(PCB)
