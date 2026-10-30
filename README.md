@@ -1,9 +1,9 @@
 # CopperLedRing
 
-## Migration branch: Rust and standard layout
+## Rust compiler and standard layout
 
 The active compiler is pinned in [.copper-version](.copper-version) to the
-Rust-only CopperScript revision `21b2ca44aee63665feeb67e39da1713ac693e934`.
+Rust-only CopperScript revision `c14c73ac040849dee9c96b4c22071b291b5f046b`.
 Run `make install-compiler`, `make fetch`, `make check` and `make compile`.
 The same commands support `TARGET=main`; `COPPER` selects an explicit binary.
 On Windows use `./build.ps1 -Action check` (GNU Make and Git Bash shortcut).

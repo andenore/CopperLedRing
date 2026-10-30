@@ -1,7 +1,7 @@
 # Rust project migration
 
-Branch: `codex/rust-client-layout`. Preparation, not completed board qualification.
-Compiler: `21b2ca44aee63665feeb67e39da1713ac693e934` (Rust only); exact dependency and assembly pins are preserved.
+Layout migration: `codex/rust-client-layout`, integrated into `main`. Board qualification remains incomplete.
+Compiler: `c14c73ac040849dee9c96b4c22071b291b5f046b` (Rust only, from CopperScript main); exact dependency and assembly pins are preserved.
 
 ## Active layout
 
@@ -67,3 +67,16 @@ Compiler: Rust-only `21b2ca44aee63665feeb67e39da1713ac693e934`.
 - Full routing, native KiCad DRC and manufacturing export were not rerun.
 - Windows entry-point execution was checked on LedRing and Bench prototype;
   all five PowerShell wrappers parsed. Linux CI has not run on these local branches.
+
+## Retired Python compiler environment
+
+The former pyproject.toml and uv.lock are archived under docs/migration.
+They pin the removed Python compiler package and are not an installation path
+for the Rust compiler. Use make install-compiler and .copper-version.
+
+## Integration with main
+
+The compiler pin now selects CopperScript main revision
+`c14c73ac040849dee9c96b4c22071b291b5f046b`. Compilation, locked/offline ERC,
+and the public-CLI regression subset passed again against that exact Rust build.
+Full routing, native DRC and manufacturing exports were not rerun.

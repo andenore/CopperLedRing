@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = "==3.12.*"
 
 [[package]]
@@ -11,12 +11,12 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "copperscript", git = "https://github.com/andenore/CopperScript.git?rev=9c0b61b354c5eb4771ddb22204889a80e67600ac" }]
+requires-dist = [{ name = "copperscript", git = "https://github.com/andenore/CopperScript.git?rev=eb926375f2318ea15c89ec92873c3263af730609" }]
 
 [[package]]
 name = "copperscript"
 version = "0.1.0"
-source = { git = "https://github.com/andenore/CopperScript.git?rev=9c0b61b354c5eb4771ddb22204889a80e67600ac#9c0b61b354c5eb4771ddb22204889a80e67600ac" }
+source = { git = "https://github.com/andenore/CopperScript.git?rev=eb926375f2318ea15c89ec92873c3263af730609#eb926375f2318ea15c89ec92873c3263af730609" }
 dependencies = [
     { name = "numpy" },
 ]
