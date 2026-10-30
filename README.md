@@ -1,19 +1,19 @@
 # CopperLedRing
 
-## Rust compiler (default)
+## Migration branch: Rust and standard layout
 
-The normal Make and Windows build commands select Cargo's Rust copper executable,
-using CARGO_HOME/bin/copper (normally ~/.cargo/bin/copper). The compiler and
-Python helper source are pinned to CopperScript 9c0b61b354c5eb4771ddb22204889a80e67600ac.
+The active compiler is pinned in [.copper-version](.copper-version) to the
+Rust-only CopperScript revision `21b2ca44aee63665feeb67e39da1713ac693e934`.
+Run `make install-compiler`, `make fetch`, `make check` and `make compile`.
+The same commands support `TARGET=main`; `COPPER` selects an explicit binary.
+On Windows use `./build.ps1 -Action check` (GNU Make and Git Bash shortcut).
+Later README sections retain historical build/evidence descriptions; use this
+section and the migration guide for current commands.
+See [migration status and remaining gates](docs/project-migration.md).
+Normal source commands require no Python compiler package. Existing Python
+tests/generators are retained for porting, not silently counted as passing.
+The source CI is a subset, not a routing, packaging or release approval.
 
-    make install-compiler
-    uv sync --locked
-
-
-COPPER can select another explicit Rust executable. Python is retained for
-project helpers and tests, not as a compiler fallback. All compiler targets now use Rust. Existing native DRC and assembly gates still control manufacturing output.
-The library, assembly and board inputs are unchanged. Historical results below
-retain their recorded compiler and inputs; this migration does not qualify a new run.
 
 LLM agents: start with `copper agent-guide` in the selected CopperScript
 environment; see [the project pointer](AGENTS.md) and retain it in new projects.
