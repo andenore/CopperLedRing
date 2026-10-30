@@ -28,6 +28,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes make kicad
           test "$(kicad-cli version)" = "10.0.7"
+      - name: Install pinned Rust compiler
+        run: make install-compiler
       - name: Route, verify and export manufacturing files from locked URL dependencies
         timeout-minutes: 45
         run: |
