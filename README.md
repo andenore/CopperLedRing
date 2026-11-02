@@ -1,19 +1,32 @@
 # CopperLedRing
 
-## Rust compiler and standard layout
+## Build
 
-The active compiler is pinned in [.copper-version](.copper-version) to the
-Rust-only CopperScript revision `c14c73ac040849dee9c96b4c22071b291b5f046b`.
-Run `make install-compiler`, `make fetch`, `make check` and `make compile`.
-The same commands support `TARGET=main`; `COPPER` selects an explicit binary.
-On Windows use `./build.ps1 -Action check` (GNU Make and Git Bash shortcut).
-Later README sections retain historical build/evidence descriptions; use this
-section and the migration guide for current commands.
-See [migration status and remaining gates](docs/project-migration.md).
-Normal source commands require no Python compiler package. Existing Python
-tests/generators are retained for porting, not silently counted as passing.
-The source CI is a subset, not a routing, packaging or release approval.
+Requires GNU Make, cargo, jq and KiCad 10 (`kicad-cli`, for refill and native
+DRC). `make` builds the Rust `copper` compiler from a sibling `../CopperScript`
+checkout (`make copper`); `make COPPER=copper …` uses an installed binary
+instead. Every footprint is managed: `copper.mod` pins CopperLib and the KiCad
+footprint libraries (`github.com/KiCad/kicad-footprints`) to GitHub commits and
+`copper.lock` binds their content, so no local KiCad footprint directory is used.
+`make/board.mk` and `make/route-build.sh` are CopperScript's shared recipes,
+copied unchanged; the `Makefile` only adds this board's settings and targets.
 
+```sh
+make             # ERC and JSON compilation (build/board/board.json)
+make check       # ERC
+make si-check    # impedance / reference-plane / matching screening
+make edit        # CopperScript mechanical/floorplan editor
+make plan        # legal placement, no board-level routing (build/board/placed.kicad_pcb)
+make route       # full placement + routing, native refill and DRC
+make render      # layer SVGs of the newest route
+make bom         # complete BOM (build/order/ordering.csv)
+make order       # JLCPCB package from the newest passed route
+```
+
+Each route gets its own `build/board/runs/<UTC time>-route/` folder, and
+`build/board/runs/latest-route` points at the newest one (`routing.log`,
+`route-report.json`, `board.kicad_pcb`, `kicad-drc.json`, `run.json`).
+On Windows, `./build.ps1 -Action route` runs the same targets through GNU Make.
 
 LLM agents: start with `copper agent-guide` in the selected CopperScript
 environment; see [the project pointer](AGENTS.md) and retain it in new projects.
@@ -166,18 +179,7 @@ snapshot. CI uses pinned GitHub Actions, Python 3.12.15, uv 0.13.0 and KiCad
 pins reproduce routing and native DRC, but they do not qualify copper artwork
 for fabrication or assembly.
 
-| Target | Purpose |
-| --- | --- |
-| `make check` | Install locked dependencies, fetch/verify CopperLib and run ERC |
-| `make pcb` | Export a placed, unrouted KiCad inspection project |
-| `make edit` | Open the shared mechanical/floorplan editor with real footprints |
-| `make route` | Run package escapes, routing and native fill verification; profile the run |
-| `make route-review` | Run the locked compiler through the standard bounded review |
-| `make render` | Export copper SVGs from the existing `build/board.kicad_pcb` |
-| `make verify` | Refill/save that board and reject native violations and opens |
-| `make assembly` | Validate exact selections and export the JLCPCB BOM |
-| `make manufacturing` | Route/verify and export manufacturing files and both-side CPL |
-| `make order` | Build and print upload reminders; never submits an order |
+The current targets are listed under [Build](#build).
 
 The normal pinned build downloads the compiler and library from their committed
 GitHub revisions without manual checkouts. The same locked compiler supports the
