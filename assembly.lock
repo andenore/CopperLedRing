@@ -1,13 +1,14 @@
 {
   "board": "RoundLedRing",
-  "electrical_sha256": "f0b1edf7a267142b5c24c89d0510eceae0da89560917c31f54953e79b6798090",
-  "schema": "copperscript-assembly-lock/v0.1",
+  "schema": "copperscript-assembly-lock/v0.4",
   "selections": [
     {
+      "electrical_sha256": "9caa6e9124e1701cbcf82dd13ff5dfdc976ed027343b14608f90b621fe92b49b",
       "footprint": "github.com/andenore/CopperLib/packages/parts/keystone/3034/footprints/Battery.pretty/BatteryHolder_Keystone_3034_1x20mm.kicad_mod",
       "manufacturer": "Keystone Electronics",
       "mpn": "3034",
       "part": "keystone.KEYSTONE_3034",
+      "populate": "supplier",
       "reference": "BT1",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C5199422",
@@ -15,10 +16,12 @@
       "supplier_part": "C5199422"
     },
     {
+      "electrical_sha256": "56c62e877b8fd93d971975bc14ad3d542a1e739d62dbbd56bdf2d8674196b41c",
       "footprint": "Capacitor_SMD:C_0603_1608Metric",
       "manufacturer": "Samsung Electro-Mechanics",
       "mpn": "CL10A475KO8NNNC",
       "part": "samsung_cl10.SAMSUNG_CL10A475KO8NNNC",
+      "populate": "supplier",
       "reference": "C_BULK",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C19666",
@@ -26,10 +29,12 @@
       "supplier_part": "C19666"
     },
     {
+      "electrical_sha256": "fa2a9957127c8019bab7456c8335b21eccba3205c608c472ed766eae39a183c9",
       "footprint": "Capacitor_SMD:C_0402_1005Metric",
       "manufacturer": "Samsung Electro-Mechanics",
       "mpn": "CL05B104KO5NNNC",
       "part": "samsung.SAMSUNG_CL05B104KO5NNNC",
+      "populate": "supplier",
       "reference": "C_DEC1",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C1525",
@@ -37,10 +42,12 @@
       "supplier_part": "C1525"
     },
     {
+      "electrical_sha256": "81fa543563574e6e65032473f1356330f540f347160c76bfd7bad910c0d7c534",
       "footprint": "Capacitor_SMD:C_0402_1005Metric",
       "manufacturer": "FH (Guangdong Fenghua Advanced Tech)",
       "mpn": "0402CG101J500NT",
       "part": "fenghua.FENGHUA_0402CG101J500NT",
+      "populate": "supplier",
       "reference": "C_DEC3",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C1546",
@@ -48,10 +55,12 @@
       "supplier_part": "C1546"
     },
     {
+      "electrical_sha256": "c8870aeb9e92b05a23beba894c8fb82a657ffcd5165775ac551cba1eda51d8b0",
       "footprint": "Capacitor_SMD:C_0603_1608Metric",
       "manufacturer": "Samsung Electro-Mechanics",
       "mpn": "CL10A105KB8NNNC",
       "part": "samsung_cl10.SAMSUNG_CL10A105KB8NNNC",
+      "populate": "supplier",
       "reference": "C_DEC4",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C15849",
@@ -59,10 +68,12 @@
       "supplier_part": "C15849"
     },
     {
+      "electrical_sha256": "ed103905b739a580757895118863de7368fe7a67a28e9d50eff8bf6299444b54",
       "footprint": "Capacitor_SMD:C_0402_1005Metric",
       "manufacturer": "Samsung Electro-Mechanics",
       "mpn": "CL05B104KO5NNNC",
       "part": "samsung.SAMSUNG_CL05B104KO5NNNC",
+      "populate": "supplier",
       "reference": "C_VDD1",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C1525",
@@ -70,10 +81,12 @@
       "supplier_part": "C1525"
     },
     {
+      "electrical_sha256": "8b54ea8aaf107046713c0330b18d04edf81a1ec898175b070e0dd720c760d514",
       "footprint": "Capacitor_SMD:C_0402_1005Metric",
       "manufacturer": "Samsung Electro-Mechanics",
       "mpn": "CL05B104KO5NNNC",
       "part": "samsung.SAMSUNG_CL05B104KO5NNNC",
+      "populate": "supplier",
       "reference": "C_VDD2",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C1525",
@@ -81,10 +94,12 @@
       "supplier_part": "C1525"
     },
     {
+      "electrical_sha256": "cec9e8b0d6590b7b29e52de5dcb2ad021d570eb9db3a3fdacc91d54142b24e92",
       "footprint": "Connector_Debug:FTSH-105-01-L-DV-007-K",
       "manufacturer": "Samtec",
       "mpn": "FTSH-105-01-L-DV-007-K",
       "part": "swd.SWD_HEADER",
+      "populate": "supplier",
       "reference": "J_SWD",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C5296739",
@@ -92,10 +107,12 @@
       "supplier_part": "C5296739"
     },
     {
+      "electrical_sha256": "c505764367c354f422651e6b8495a33ef374c9e9d8a3919c58db675c27ac1a23",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED1",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -103,10 +120,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "db1517826d3126470e5ef24f66e5ca45d6e12a6abfb15eeeeba294b758bf516a",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED10",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -114,10 +133,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "b0e3ccb21411765b39cb41ac416d7d2f162ebc9fafc8b69da3d8a9a4227d3931",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED11",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -125,10 +146,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "ecf08d1f9cd47879f1bb71767555925100534a7117c2ae50d0280fe576d21971",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED12",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -136,10 +159,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "511688be45d57b74db447daf2e5a5e46981e15c20fff432b448a02fb0aaf7035",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED2",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -147,10 +172,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "138d7d5a3948e8a1ade4ba8af00a6326a37bc833e8fc908e04dbf686335698ea",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED3",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -158,10 +185,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "72faeb0cf31078cde441cc9ee91494aaf8a72e6c25660517906f2c6eae49b83d",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED4",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -169,10 +198,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "7d7b67006dea86cb07a3ad010a3d63ea215da66287260f7f5e911cbc75771a50",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED5",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -180,10 +211,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "2afdf10b328487cf34d716e35f7a93ddeb646fa59bf5d82294c61e038262f33c",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED6",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -191,10 +224,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "000fee9ea58105807be1a30164f4610569cebfbdee021ea61a2a12c0d43dadb1",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED7",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -202,10 +237,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "ad11c3856db0a96473e990e97cc9c253f939f25a8ede06b23d4610b2b8af998f",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED8",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -213,10 +250,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "e8c8c4268957cda3ca1aa77584ba94cdf4248cd9c36d4e4d0601feee7053f9f3",
       "footprint": "KENTO:KENTO_KT0603R",
       "manufacturer": "Hubei KENTO Elec",
       "mpn": "KT-0603R",
       "part": "kento.KENTO_KT0603R",
+      "populate": "supplier",
       "reference": "LED9",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C2286",
@@ -224,10 +263,12 @@
       "supplier_part": "C2286"
     },
     {
+      "electrical_sha256": "7284beb2d583aa06dd5be51b810afe2313c04d610c1911926d5c8a2494a81901",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED1",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -235,10 +276,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "264efc68fe015d66a6f9d28765e99b6f8c275cf03eb5ef0971eb83b89a61f49b",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED10",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -246,10 +289,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "8b4e1586626caa2b7be647a37642174db2e82f7020145310df83f000624bdea4",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED11",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -257,10 +302,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "9962a9d79a75c4c5023eeed2da329491d4125e8ea0e1c613c81d539d8cf9dc04",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED12",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -268,10 +315,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "7752a13c2475046638d7cf04dae44bd4becb4b53bef6b48e7d3b28e8cdcd5e4b",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED2",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -279,10 +328,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "c0fe82b99527862779b32ae5506b58774bdb7f06c4fa4132364b699dddc57c38",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED3",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -290,10 +341,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "d0d2492c6bde2ed16b117db7bcd84b3f6974c15a2ff8ef3a2fa10d3286f97dbd",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED4",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -301,10 +354,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "3107a535d668b9a5db78f22573f5f1883462b0ab7d4a3e907807f7fad8bbe2c4",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED5",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -312,10 +367,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "09cabaafc639b786992b79ab8eda65830a802bca458429480cf11868ace68f2f",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED6",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -323,10 +380,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "4ab36fab122073b5ad7bfeb35b3751d894449db6daabeea96d8209a0820b2515",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED7",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -334,10 +393,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "f62c2eead7a43ca6f1bf4d515ff9500f4d5735147b3aa8769d0733f9d3e9f26b",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED8",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -345,10 +406,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "65dfe0e42415f29a7fe4ac97ea6eb1738c199427d2d3a97e014ed4e903d9f1b6",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_LED9",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -356,10 +419,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "1f4de68ebb5785c106a51a8fa645b5e3204cec6478ca38f5cf0dcbd31391b49c",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
       "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
       "mpn": "0603WAF1002T5E",
       "part": "uniroyal.UNIROYAL_0603WAF1002T5E",
+      "populate": "supplier",
       "reference": "R_RESET",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C25804",
@@ -367,10 +432,12 @@
       "supplier_part": "C25804"
     },
     {
+      "electrical_sha256": "62ee0aaffbf6b2930a241877eb5f99beecbbeb4ac7bddf2272e82790a7efb3c2",
       "footprint": "Package_DFN_QFN:QFN-48-1EP_6x6mm_P0.4mm_EP4.2x4.2mm",
       "manufacturer": "Nordic Semiconductor",
       "mpn": "NRF52832-QFAA-R",
       "part": "nordic.NRF52832_QFAA",
+      "populate": "supplier",
       "reference": "U1",
       "reviewed": true,
       "source_url": "https://jlcpcb.com/partdetail/C77540",

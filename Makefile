@@ -43,7 +43,7 @@ plan: layout
 # Build the Rust compiler from the CopperScript checkout, with its pinned
 # toolchain (rust-toolchain.toml applies in that directory); incremental, so a
 # no-op when current. Skipped when COPPER names a binary outside that checkout.
-check compile layout edit route si-check bom order: copper
+check compile layout edit route si-check bom order assembly-update: copper
 copper:
 	$(if $(filter $(COPPERSCRIPT)/target/release/copper,$(COPPER)),cd $(COPPERSCRIPT) && $(CARGO) build --release --locked -p copper,@true)
 
@@ -75,12 +75,18 @@ review:
 # supplier code. No route needed.
 LOCK := assembly.lock
 ORDER := build/order
-.PHONY: bom
+.PHONY: bom assembly-update
 bom:
 	@mkdir -p $(ORDER)
 	$(COPPER) assembly check $(SOURCE) $(RESOLVE_ARGS) --offline --lock $(LOCK) --report $(ORDER)/assembly-report.json
 	$(COPPER) assembly bom $(SOURCE) $(RESOLVE_ARGS) --offline --lock $(LOCK) -o $(ORDER)/bom.csv --hand-assembly $(ORDER)/hand-assembly.csv --ordering $(ORDER)/ordering.csv
 	@echo "Complete BOM -> $(ORDER)/ordering.csv"
+
+# Rebind assembly.lock to the current source after changes: unchanged
+# components keep their selection and review, changed ones keep their
+# selection but need review again, new ones are added unreviewed.
+assembly-update:
+	$(COPPER) assembly update $(SOURCE) $(RESOLVE_ARGS) --offline --lock $(LOCK)
 
 # Prototype order package for JLCPCB PCB + PCBA, built from the newest passed
 # route (build/board/runs/latest-route), so run `make route` first. JLCPCB places
