@@ -60064,6 +60064,29 @@
       "version": "7ebfa6b23cc292a56f751b7b5f4a0e12eeef69dd"
     },
     {
+      "checksum": "sha256:e1fb3c226e726de665194dc1de8fba2fe8a2e368ee6363ae7c437963418c714a",
+      "files": [
+        {
+          "path": "Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "sha256": "03e44c4b2b727b8d4b6b1fd598cbd12dd5e614f1dfeefa96a92a07e3a3b312a2",
+          "size": 43502
+        },
+        {
+          "path": "Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+          "size": 43450
+        },
+        {
+          "path": "Resistor_SMD.3dshapes/R_0603_1608Metric.step",
+          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+          "size": 40618
+        }
+      ],
+      "module": "github.com/KiCad/kicad-packages3D",
+      "source": "replace:sparse-git:https://gitlab.com/kicad/libraries/kicad-packages3D.git@10.0.8",
+      "version": "10.0.8"
+    },
+    {
       "checksum": "sha256:73371ed3640e38334ad0761234d1d9fb37f87cb0110cec9f05f86d0a372fd6c5",
       "files": [
         {

@@ -7,3 +7,5 @@ footprint-library KENTO github.com/andenore/CopperLib/packages/parts/kento/kt060
 footprint-library Capacitor_SMD github.com/KiCad/kicad-footprints/Capacitor_SMD.pretty
 footprint-library Package_DFN_QFN github.com/KiCad/kicad-footprints/Package_DFN_QFN.pretty
 footprint-library Resistor_SMD github.com/KiCad/kicad-footprints/Resistor_SMD.pretty
+require github.com/KiCad/kicad-packages3D 10.0.8
+replace github.com/KiCad/kicad-packages3D => gitlab.com/kicad/libraries/kicad-packages3D 10.0.8
