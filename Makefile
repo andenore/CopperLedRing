@@ -1,8 +1,8 @@
 # CopperLedRing board settings. The recipes are CopperScript's shared ones
-# (make/board.mk and make/route-build.sh, copied unchanged from CopperScript
-# 85ca0e4); only settings and the project's own targets live here.
+# (make/board.mk and make/route-build.sh, maintained from CopperScript).
+# Only invocation settings and this project's own targets live here.
+# Source-driven layer selection: see docs/board-configuration.md.
 SOURCE := board.copper
-LAYERS := 2
 FAB_PROFILE := generic
 # Maze fanout and early surface-zone stitching with wider plane searches.
 EXTRA_ROUTE_ARGS ?= --fanout-maze --early-plane-stitch --stitch-surface-zones --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3
@@ -50,7 +50,7 @@ copper:
 # Pre-route signal-integrity screening: impedance from the declared stack-up,
 # reference planes, layer groups and length-match groups.
 si-check:
-	$(COPPER) si-check $(SOURCE) $(RESOLVE_ARGS) --offline --layers $(LAYERS) --fab-profile $(FAB_PROFILE)
+	$(COPPER) si-check $(SOURCE) $(RESOLVE_ARGS) --offline $(_layer_args) --fab-profile $(FAB_PROFILE)
 
 # Layer SVGs of the newest routed (and refilled) board.
 render:
