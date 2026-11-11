@@ -1,5 +1,5 @@
 # CopperLedRing board settings. The recipes are CopperScript's shared ones
-# (make/board.mk, make/route-build.sh and make/release-build.sh, maintained from CopperScript).
+# (make/board.mk and make/release-build.sh, maintained from CopperScript).
 # Only invocation settings and this project's own targets live here.
 # Source-driven layer selection: see docs/board-configuration.md.
 SOURCE := board.copper
@@ -16,9 +16,13 @@ CARGO ?= $(or $(shell command -v cargo),$(HOME)/.cargo/bin/cargo)
 
 include make/board.mk
 
+# KiCad is opt-in. With KICAD_CLI empty (the default) route, order and render
+# use CopperScript's own fill, DRC, plotter and renderer and need no KiCad.
+# Set KICAD_CLI to a kicad-cli path to use KiCad for all three.
+_kicad_export = $(if $(strip $(KICAD_CLI)),--drc kicad --plotter kicad --kicad-cli "$(KICAD_CLI)")
+
 .NOTPARALLEL:
 SHELL := /bin/bash
-KICAD_CLI ?= kicad-cli
 # Every footprint is managed: copper.mod maps the KiCad libraries to the pinned
 # github.com/KiCad/kicad-footprints commit and copper.lock binds their content,
 # so no local KiCad footprint directory is used.
@@ -53,8 +57,18 @@ si-check:
 	$(COPPER) si-check $(SOURCE) $(RESOLVE_ARGS) --offline $(_layer_args) --fab-profile $(FAB_PROFILE)
 
 # Layer SVGs of the newest routed (and refilled) board.
+_comma := ,
+RENDER_LAYERS ?= F.Cu,B.Cu
 render:
-	"$(KICAD_CLI)" pcb export svg --layers F.Cu,B.Cu --common-layers Edge.Cuts --mode-multi --fit-page-to-board --exclude-drawing-sheet --check-zones -o $(RUNS)/latest-route/layers/ $(ROUTED)
+ifeq ($(strip $(KICAD_CLI)),)
+	@rm -rf $(RUNS)/latest-route/plot && mkdir -p $(RUNS)/latest-route/layers
+	$(COPPER) plot $(ROUTED) -o $(RUNS)/latest-route/plot
+	@for layer in $(subst $(_comma), ,$(RENDER_LAYERS)); do \
+	  $(COPPER) render $(RUNS)/latest-route/plot --layer $$layer --layer Edge.Cuts \
+	    -o $(RUNS)/latest-route/layers/board-$${layer//./_}.svg || exit 1; done
+else
+	"$(KICAD_CLI)" pcb export svg --layers $(RENDER_LAYERS) --common-layers Edge.Cuts --mode-multi --fit-page-to-board --exclude-drawing-sheet --check-zones -o $(RUNS)/latest-route/layers/ $(ROUTED)
+endif
 
 # Browse and annotate a board in CopperReview (local web viewer; Ctrl+C stops it).
 # The page also compiles this folder in the browser for the electrical review
@@ -96,11 +110,11 @@ assembly-update:
 # every assembly.lock selection with populate = supplier; hand-assembly.csv lists
 # the rest to buy and fit by hand. The files are native-DRC-clean but NOT an
 # independently CAM-qualified release (--skip-independent-cam), and the CPL
-# keeps KiCad's rotations: check every part in JLCPCB's placement preview.
+# keeps KiCad's rotation convention: check every part in JLCPCB's placement preview.
 order:
 	@jq -e '.status == "passed"' $(RUNS)/latest-route/run.json > /dev/null 2>&1 || { echo "No passed route at $(RUNS)/latest-route: run 'make route' first."; exit 1; }
 	@stale=$$(for f in $(SOURCE) copper.mod copper.lock; do [ $$f -nt $(ROUTED) ] && echo $$f; done); \
 	  if [ -n "$$stale" ]; then echo "Routed board predates: $$stale -- run 'make route' first."; exit 1; fi
 	@$(MAKE) --no-print-directory bom
-	$(COPPER) export-manufacturing $(ROUTED) --skip-independent-cam --bom $(ORDER)/bom.csv --replace -o $(ORDER)/jlcpcb
+	$(COPPER) export-manufacturing $(ROUTED) $(_kicad_export) --skip-independent-cam --bom $(ORDER)/bom.csv --replace -o $(ORDER)/jlcpcb
 	@echo "Order package -> $(ORDER): upload jlcpcb/ to JLCPCB; buy and fit hand-assembly.csv by hand."
