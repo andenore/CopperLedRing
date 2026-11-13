@@ -19,7 +19,7 @@ VERIFY := $(if $(KICAD),--verify kicad)
 EXPORT := $(if $(KICAD),--drc kicad --plotter kicad)
 
 # Every route is a new build/board/<UTC time>-<pid>/ with a run.json; RUN is the newest.
-RUN = $(patsubst %/run.json,%,$(lastword $(sort $(wildcard build/board/*/run.json))))
+RUN = $(patsubst %/run.json,%,$(lastword $(sort $(wildcard build/board/[0-9]*/run.json))))
 
 check:
 	$(COPPER) check board.copper --locked
