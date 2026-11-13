@@ -11,6 +11,12 @@ board RoundLedRing {
     import samsung_cl10 "github.com/andenore/CopperLib/packages/parts/samsung/cl10";
     import fenghua "github.com/andenore/CopperLib/packages/parts/fenghua/0402cg";
 
+    // Build settings: maze fanout and wider plane searches for the stitching.
+    build {
+        routing { fanout_maze = true; }
+        planes { stitch_radius = 5mm; contact_radius = 8mm; stitch_detour = 3mm; }
+    }
+
     component U1: nordic.NRF52832_QFAA;
     component BT1: keystone.KEYSTONE_3034;
     component J_SWD: swd.SWD_HEADER;

@@ -8,15 +8,12 @@ SHELL := bash
 .NOTPARALLEL:
 .PHONY: check si-check layout route render review bom assembly-update order
 
-# Router settings for this board: maze fanout and early surface-zone stitching
-# with wider plane searches.
-ROUTE := --fab-profile generic --candidates 1 --feedback-iterations 1 --router-iterations 5 --progress \
-  --fanout --fanout-maze --early-plane-stitch --stitch-surface-zones \
-  --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3
-
 # KiCad cross-check, off by default: make route order KICAD=1 (kicad-cli on PATH).
 VERIFY := $(if $(KICAD),--verify kicad)
 EXPORT := $(if $(KICAD),--drc kicad --plotter kicad)
+
+# Fabrication preset and router settings are in the board's `build` block;
+# an option after `--` on a call overrides it.
 
 # Every route is a new build/board/<UTC time>-<pid>/ with a run.json; RUN is the newest.
 RUN = $(patsubst %/run.json,%,$(lastword $(sort $(wildcard build/board/[0-9]*/run.json))))
@@ -25,13 +22,13 @@ check:
 	$(COPPER) check board.copper --locked
 
 si-check:
-	$(COPPER) si-check board.copper --locked --offline --fab-profile generic
+	$(COPPER) si-check board.copper --locked --offline
 
 layout:
-	$(COPPER) plan-layout board.copper --locked --fab-profile generic --candidates 1 -o build/board/placed.kicad_pcb --report build/board/placement.json
+	$(COPPER) plan-layout board.copper --locked --candidates 1 -o build/board/placed.kicad_pcb --report build/board/placement.json
 
 route:
-	$(COPPER) build board.copper --locked $(VERIFY) -- $(ROUTE)
+	$(COPPER) build board.copper --locked $(VERIFY)
 
 render:
 	rm -rf $(RUN)/plot && $(COPPER) plot $(RUN)/board.kicad_pcb -o $(RUN)/plot
