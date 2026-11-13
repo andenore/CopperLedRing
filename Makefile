@@ -48,7 +48,8 @@ bom:
 assembly-update:
 	$(COPPER) assembly update board.copper --locked --offline --lock assembly.lock
 
-# JLCPCB package from the newest route. The export refills and checks the board
-# itself and refuses one that is not clean; it is not independently CAM-qualified.
+# JLCPCB package from the newest route. The export refuses a route that did not
+# pass or predates a source change, refills and checks the board itself, and is
+# not independently CAM-qualified.
 order: bom
-	$(COPPER) export-manufacturing $(RUN)/board.kicad_pcb $(EXPORT) --skip-independent-cam --bom build/order/bom.csv --replace -o build/order/jlcpcb
+	$(COPPER) export-manufacturing $(RUN)/board.kicad_pcb --run $(RUN)/run.json $(EXPORT) --skip-independent-cam --bom build/order/bom.csv --replace -o build/order/jlcpcb

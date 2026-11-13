@@ -2,33 +2,33 @@
 
 ## Build
 
-Requires GNU Make, cargo and jq. KiCad 10 is optional: `make route`, `make order` and
-`make render` use CopperScript's own fill, DRC, plotter and renderer unless
-`KICAD_CLI` names a `kicad-cli`. `make` builds the Rust `copper` compiler from a sibling `../CopperScript`
-checkout (`make copper`); `make COPPER=copper …` uses an installed binary
-instead. Every footprint is managed: `copper.mod` pins CopperLib and the KiCad
-footprint libraries (`github.com/KiCad/kicad-footprints`) to GitHub commits and
-`copper.lock` binds their content, so no local KiCad footprint directory is used.
-`make/board.mk` is CopperScript's shared recipe file (with `make/release-build.sh` where present),
-copied unchanged; the `Makefile` only adds this board's settings and targets.
+Requires GNU Make and the Rust `copper` compiler pinned in `.copper-version`:
+build it in a sibling `../CopperScript` checkout
+(`cargo build --release --locked -p copper`) or pass `COPPER=copper` to use an
+installed one. KiCad is not needed. Every footprint is managed: `copper.mod`
+pins CopperLib and the KiCad footprint libraries to commits and `copper.lock`
+binds their content.
+
+The `Makefile` is the whole build: each target is a plain `copper` call that
+you can read there and run by hand (`copper <command> --help` explains the
+options).
 
 ```sh
-make             # ERC and JSON compilation (build/board/board.json)
 make check       # ERC
 make si-check    # impedance / reference-plane / matching screening
-make edit        # CopperScript mechanical/floorplan editor
-make plan        # legal placement, no board-level routing (build/board/placed.kicad_pcb)
-make route       # full placement + routing, native refill and DRC
-make render      # layer SVGs of the newest route
+make layout      # legal placement, no routing (build/board/placed.kicad_pcb)
+make route       # placement + routing, refill and DRC
+make render      # front and back SVGs of the newest route
+make review      # open the newest route in CopperReview
 make bom         # complete BOM (build/order/ordering.csv)
-make order       # JLCPCB package from the newest passed route
-make release RELEASE=<part>-<rev>  # checksummed bundle of the order, its route run and BOM in build/release/ for archiving by hand
+make order       # JLCPCB package from the newest route (build/order/jlcpcb)
 ```
 
-Each route gets its own `build/board/runs/<UTC time>-route/` folder, and
-`build/board/runs/latest-route` points at the newest one (`routing.log`,
-`route-report.json`, `board.kicad_pcb`, `kicad-drc.json`, `run.json`).
-On Windows, `./build.ps1 -Action route` runs the same targets through GNU Make.
+Each route is a new `build/board/<UTC time>-<pid>/` folder (`routing.log`,
+`route-report.json`, `board.kicad_pcb`, `native-drc.json`, `run.json`); render,
+review and order use the newest. `make order` refuses a route that did not pass
+or that predates a change to the sources. `make route order KICAD=1` refills,
+checks and plots with `kicad-cli` instead, as a cross-check.
 
 LLM agents: start with `copper agent-guide` in the selected CopperScript
 environment; see [the project pointer](AGENTS.md) and retain it in new projects.

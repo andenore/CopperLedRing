@@ -51,8 +51,8 @@ at 20 mA, whereas this board deliberately uses low-current 10 kohm channels.
 ## Build and ordering checks
 
 ```sh
-make assembly       # check exact selections and create build/bom.csv
-make order          # route, fill, native DRC, BOM, CPL, Gerbers, drills and ZIPs
+make bom            # check exact selections and create build/order/bom.csv
+make route order    # route, fill, native DRC, BOM, CPL, Gerbers, drills and ZIPs
 ```
 
 For JLCPCB upload `build/manufacturing/gerbers-drill.zip`, `bom.csv` and `cpl.csv`.
