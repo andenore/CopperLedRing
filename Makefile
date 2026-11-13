@@ -1,120 +1,54 @@
-# CopperLedRing board settings. The recipes are CopperScript's shared ones
-# (make/board.mk and make/release-build.sh, maintained from CopperScript).
-# Only invocation settings and this project's own targets live here.
-# Source-driven layer selection: see docs/board-configuration.md.
-SOURCE := board.copper
-FAB_PROFILE := generic
-# Maze fanout and early surface-zone stitching with wider plane searches.
-EXTRA_ROUTE_ARGS ?= --fanout-maze --early-plane-stitch --stitch-surface-zones --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3
-
-# The CopperScript compiler is the Rust `copper` binary. By default it is built
-# from the sibling CopperScript checkout (make copper); set COPPER=copper to use
-# an installed binary on PATH, or COPPERSCRIPT to another checkout.
-COPPERSCRIPT ?= ../CopperScript
-COPPER ?= $(COPPERSCRIPT)/target/release/copper
-CARGO ?= $(or $(shell command -v cargo),$(HOME)/.cargo/bin/cargo)
-
-include make/board.mk
-
-# KiCad is opt-in. With KICAD_CLI empty (the default) route, order and render
-# use CopperScript's own fill, DRC, plotter and renderer and need no KiCad.
-# Set KICAD_CLI to a kicad-cli path to use KiCad for all three.
-_kicad_export = $(if $(strip $(KICAD_CLI)),--drc kicad --plotter kicad --kicad-cli "$(KICAD_CLI)")
-
+# CopperLedRing. Each target is a plain `copper` call, written out in full;
+# `copper <command> --help` explains every option. Nothing here needs KiCad.
+#
+# COPPER is the compiler pinned in .copper-version: build it in the CopperScript
+# checkout (cargo build --release --locked -p copper) or pass COPPER=copper.
+COPPER ?= ../CopperScript/target/release/copper
+SHELL := bash
 .NOTPARALLEL:
-SHELL := /bin/bash
-# Every footprint is managed: copper.mod maps the KiCad libraries to the pinned
-# github.com/KiCad/kicad-footprints commit and copper.lock binds their content,
-# so no local KiCad footprint directory is used.
+.PHONY: check si-check layout route render review bom assembly-update order
 
-# Each route gets a fresh build/board/runs/<UTC time>-route/;
-# build/board/runs/latest-route points at the newest one.
-RUNS := $(OUT)/runs
-RUN_ID := $(shell date -u +%Y%m%dT%H%M%SZ)-route
-ROUTED := $(RUNS)/latest-route/board.kicad_pcb
-route: RUN_DIR = $(RUNS)/$(RUN_ID)
-route: | latest-route
-.PHONY: latest-route
-latest-route:
-	@mkdir -p $(RUNS)/$(RUN_ID) && ln -sfn $(RUN_ID) $(RUNS)/latest-route
-	@echo "Route run: $(RUNS)/$(RUN_ID) (follow: tail -f $(RUNS)/latest-route/routing.log)"
+# Router settings for this board: maze fanout and early surface-zone stitching
+# with wider plane searches.
+ROUTE := --fab-profile generic --candidates 1 --feedback-iterations 1 --router-iterations 5 --progress \
+  --fanout --fanout-maze --early-plane-stitch --stitch-surface-zones \
+  --plane-stitch-radius-mm 5 --plane-contact-radius-mm 8 --plane-stitch-detour-mm 3
 
-# One legal placement candidate with macro copper; no board-level routing.
-layout: PHYSICAL_ARGS += --candidates 1
-.PHONY: copper plan si-check render review order
-plan: layout
+# KiCad cross-check, off by default: make route order KICAD=1 (kicad-cli on PATH).
+VERIFY := $(if $(KICAD),--verify kicad)
+EXPORT := $(if $(KICAD),--drc kicad --plotter kicad)
 
-# Build the Rust compiler from the CopperScript checkout, with its pinned
-# toolchain (rust-toolchain.toml applies in that directory); incremental, so a
-# no-op when current. Skipped when COPPER names a binary outside that checkout.
-check compile layout edit route si-check bom order assembly-update: copper
-copper:
-	$(if $(filter $(COPPERSCRIPT)/target/release/copper,$(COPPER)),cd $(COPPERSCRIPT) && $(CARGO) build --release --locked -p copper,@true)
+# Every route is a new build/board/<UTC time>-<pid>/ with a run.json; RUN is the newest.
+RUN = $(patsubst %/run.json,%,$(lastword $(sort $(wildcard build/board/*/run.json))))
 
-# Pre-route signal-integrity screening: impedance from the declared stack-up,
-# reference planes, layer groups and length-match groups.
+check:
+	$(COPPER) check board.copper --locked
+
 si-check:
-	$(COPPER) si-check $(SOURCE) $(RESOLVE_ARGS) --offline $(_layer_args) --fab-profile $(FAB_PROFILE)
+	$(COPPER) si-check board.copper --locked --offline --fab-profile generic
 
-# Layer SVGs of the newest routed (and refilled) board.
-_comma := ,
-RENDER_LAYERS ?= F.Cu,B.Cu
+layout:
+	$(COPPER) plan-layout board.copper --locked --fab-profile generic --candidates 1 -o build/board/placed.kicad_pcb --report build/board/placement.json
+
+route:
+	$(COPPER) build board.copper --locked $(VERIFY) -- $(ROUTE)
+
 render:
-ifeq ($(strip $(KICAD_CLI)),)
-	@rm -rf $(RUNS)/latest-route/plot && mkdir -p $(RUNS)/latest-route/layers
-	$(COPPER) plot $(ROUTED) -o $(RUNS)/latest-route/plot
-	@for layer in $(subst $(_comma), ,$(RENDER_LAYERS)); do \
-	  $(COPPER) render $(RUNS)/latest-route/plot --layer $$layer --layer Edge.Cuts \
-	    -o $(RUNS)/latest-route/layers/board-$${layer//./_}.svg || exit 1; done
-else
-	"$(KICAD_CLI)" pcb export svg --layers $(RENDER_LAYERS) --common-layers Edge.Cuts --mode-multi --fit-page-to-board --exclude-drawing-sheet --check-zones -o $(RUNS)/latest-route/layers/ $(ROUTED)
-endif
+	rm -rf $(RUN)/plot && $(COPPER) plot $(RUN)/board.kicad_pcb -o $(RUN)/plot
+	$(COPPER) render $(RUN)/plot --layer F.Cu --layer Edge.Cuts -o $(RUN)/front.svg
+	$(COPPER) render $(RUN)/plot --layer B.Cu --layer Edge.Cuts -o $(RUN)/back.svg
 
-# Browse and annotate a board in CopperReview (local web viewer; Ctrl+C stops it).
-# The page also compiles this folder in the browser for the electrical review
-# (schematic, power, buses), linked to the board; reload it to recompile.
-# 3D bodies are KiCad's STEP models once CopperReview has run `npm run build:occt`.
-# Defaults to the newest routed board; its stage follows that route's run.json.
-# Point REVIEW_BOARD elsewhere (e.g. $(OUT)/placed.kicad_pcb) and set
-# REVIEW_STAGE=placed to review a placement. REVIEW_ARGS=--no-browser etc.
-UV ?= uv
-COPPERREVIEW ?= ../CopperReview
-REVIEW_BOARD ?= $(ROUTED)
-REVIEW_STAGE ?=
-REVIEW_ARGS ?=
-review_stage = $(or $(REVIEW_STAGE),$(if $(filter $(ROUTED),$(REVIEW_BOARD)),$$(jq -e '.status == "passed"' $(RUNS)/latest-route/run.json > /dev/null 2>&1 && echo fully_routed || echo partially_routed),unknown))
 review:
-	@test -f $(REVIEW_BOARD) || { echo "No board at $(REVIEW_BOARD): run 'make route' first."; exit 1; }
-	$(UV) run --project $(COPPERREVIEW) copper-review $(REVIEW_BOARD) --project . --entry $(SOURCE) --source $(SOURCE) --stage $(review_stage) $(REVIEW_ARGS)
+	uv run --project ../CopperReview copper-review $(RUN)/board.kicad_pcb --project . --entry board.copper --source board.copper
 
-# Complete ordering list: every component on the board, grouped by part, with
-# quantity per board, manufacturer and MPN, the assembly route and the recorded
-# supplier code. No route needed.
-LOCK := assembly.lock
-ORDER := build/order
-.PHONY: bom assembly-update
 bom:
-	@mkdir -p $(ORDER)
-	$(COPPER) assembly check $(SOURCE) $(RESOLVE_ARGS) --offline --lock $(LOCK) --report $(ORDER)/assembly-report.json
-	$(COPPER) assembly bom $(SOURCE) $(RESOLVE_ARGS) --offline --lock $(LOCK) -o $(ORDER)/bom.csv --hand-assembly $(ORDER)/hand-assembly.csv --ordering $(ORDER)/ordering.csv
-	@echo "Complete BOM -> $(ORDER)/ordering.csv"
+	$(COPPER) assembly check board.copper --locked --offline --lock assembly.lock
+	$(COPPER) assembly bom board.copper --locked --offline --lock assembly.lock -o build/order/bom.csv --hand-assembly build/order/hand-assembly.csv --ordering build/order/ordering.csv
 
-# Rebind assembly.lock to the current source after changes: unchanged
-# components keep their selection and review, changed ones keep their
-# selection but need review again, new ones are added unreviewed.
 assembly-update:
-	$(COPPER) assembly update $(SOURCE) $(RESOLVE_ARGS) --offline --lock $(LOCK)
+	$(COPPER) assembly update board.copper --locked --offline --lock assembly.lock
 
-# Prototype order package for JLCPCB PCB + PCBA, built from the newest passed
-# route (build/board/runs/latest-route), so run `make route` first. JLCPCB places
-# every assembly.lock selection with populate = supplier; hand-assembly.csv lists
-# the rest to buy and fit by hand. The files are native-DRC-clean but NOT an
-# independently CAM-qualified release (--skip-independent-cam), and the CPL
-# keeps KiCad's rotation convention: check every part in JLCPCB's placement preview.
-order:
-	@jq -e '.status == "passed"' $(RUNS)/latest-route/run.json > /dev/null 2>&1 || { echo "No passed route at $(RUNS)/latest-route: run 'make route' first."; exit 1; }
-	@stale=$$(for f in $(SOURCE) copper.mod copper.lock; do [ $$f -nt $(ROUTED) ] && echo $$f; done); \
-	  if [ -n "$$stale" ]; then echo "Routed board predates: $$stale -- run 'make route' first."; exit 1; fi
-	@$(MAKE) --no-print-directory bom
-	$(COPPER) export-manufacturing $(ROUTED) $(_kicad_export) --skip-independent-cam --bom $(ORDER)/bom.csv --replace -o $(ORDER)/jlcpcb
-	@echo "Order package -> $(ORDER): upload jlcpcb/ to JLCPCB; buy and fit hand-assembly.csv by hand."
+# JLCPCB package from the newest route. The export refills and checks the board
+# itself and refuses one that is not clean; it is not independently CAM-qualified.
+order: bom
+	$(COPPER) export-manufacturing $(RUN)/board.kicad_pcb $(EXPORT) --skip-independent-cam --bom build/order/bom.csv --replace -o build/order/jlcpcb
